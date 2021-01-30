@@ -1,7 +1,6 @@
 #define ATLAST "( Blink morse code p i c o ) \
 : setup 25 gpioinit 25 1 gpiosetdir ; \
-: sl longsleep ; \
-: sp 100 sl ; \
+: sp 100 longsleep ; \
 : sh 25 1 gpioput sp 25 0 gpioput sp ; \
 : lo 25 1 gpioput sp sp sp 25 0 gpioput sp ; \
 : p sh lo lo sh ; \

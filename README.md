@@ -8,4 +8,4 @@ Put the forth code in the file forth.h and compile atlast.c in the cmake environ
 
 Use the Makefile included in this repo to compile atlast.c to run on the Raspberry Pi or other host to be able to test your forth code before flashing to the pico. The forth code must contain an indefinite loop, e.g. begin ... again to keep the application running.
 
-At this date january 30 only a few primitives are implemented, more to come.
+At this date january 30 only a few pico primitives are implemented, more to come.

@@ -1,6 +1,6 @@
 # pico_atlast 
 
-Documentation: http://www.fourmilab.ch/atlast/atlast.html
+Documentation: http://www.fourmilab.ch/atlast/
 
 Atlast Forth for Raspberry Pi Pico is a forth programming environment for the pico. 
 

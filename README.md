@@ -11,9 +11,12 @@ Use the Makefile included in this repo to compile atlast.c to run on a Raspberry
 Read the PICO documentation for the C/C++ API for a detailed description of each function.
 
 Defined words:
+
 SLEEP_US
 	Stack before: integer number of microseconds to sleep
+	
 	This word leaves nothing at the stack
+	
 This can be illustrated in this way: ( microsec -- )
 
 SLEEP_MS

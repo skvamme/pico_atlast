@@ -13,9 +13,10 @@ Read the PICO documentation for the C/C++ API for a detailed description of each
 Defined words:
 
 SLEEP_US
-	Stack before: integer number of microseconds to sleep
+
+Stack before: integer number of microseconds to sleep
 	
-	This word leaves nothing at the stack
+This word leaves nothing at the stack
 	
 This can be illustrated in this way: ( microsec -- )
 

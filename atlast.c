@@ -78,16 +78,41 @@
 #define FALSE	0
 #define TRUE	1
 
-#include "atldef.h"
-
 #ifdef MATH
 #include <math.h>
 #endif
 
-#ifdef PICO
+#include "atldef.h"
 #include "pico/stdlib.h"
-#include "forth.h"
+#include "hardware/adc.h"
+#include "hardware/gpio.h"
+#include "hardware/spi.h"
+
+
+#ifdef PICO
+#define GPIO
+#define SPI
+#define ADC
+#ifdef SPI
+#define PIN_MISO 16
+#define PIN_CS   17
+#define PIN_SCK  18
+#define PIN_MOSI 19
 #endif
+#ifdef UART
+#include "hardware/uart.h"
+#define UART_ID uart1
+#define BAUD_RATE 9600
+#define UART_TX_PIN 4
+#define UART_RX_PIN 5
+#endif
+
+#ifdef PIO
+#include "hardware/pio.h"
+#endif
+
+#include "forth.h"
+#endif /* PICO */
 
 /* LINTLIBRARY */
 
@@ -2727,18 +2752,31 @@ prim P_fwdresolve()		      /* Emit forward jump offset */
 #endif /* COMPILERW */
 
 #ifdef PICO
-prim P_sleep() // microsec --- 
+
+prim P_sleep_us() // microsec --- 
 { 
 	Sl(1);
 	busy_wait_us_32 (S0);
 	Pop;
 }
 
-prim P_longsleep() // millisec ---
+prim P_sleep_ms() // millisec ---
 { 
 	Sl(1);
 	sleep_ms(S0); 	
 	Pop;
+}
+
+/* GPIO ****************************************** */
+#ifdef GPIO
+prim P_gpio_set_irq_enabled_with_callback()
+{
+	
+}
+
+prim P_gpio_set_function()
+{
+	
 }
 
 prim P_gpio_init() // pin ---
@@ -2748,7 +2786,7 @@ prim P_gpio_init() // pin ---
 	Pop;
 }
 
-prim P_gpio_set_dir() // pin type ---
+prim P_gpio_set_dir() // pin type --- (Type: 1=output, 0=input)
 {
 	Sl(2);
 	gpio_set_dir(S1, S0);
@@ -2763,6 +2801,230 @@ prim P_gpio_put() // pin state ---
 	Pop;
 	Pop;
 }
+
+prim P_gpio_get() // pin --
+{
+	Sl(1);
+	gpio_get(S0);
+	Pop;
+}
+
+prim P_gpio_get_all() //  -- value
+{
+	stackitem result;
+	
+	So(1);
+	result = gpio_get_all();
+	Push = result;
+}
+
+prim P_gpio_set_pulls() // pin up down -- ( up and down are booleans 1=true 0=false)
+{
+	Sl(3);
+	gpio_set_pulls(S2,S1,S0);
+	Pop;
+	Pop;
+	Pop;
+}
+
+prim P_gpio_pull_up() // pin --
+{
+	Sl(1);
+	gpio_pull_up(S0);
+	Pop;
+}
+
+prim P_gpio_pull_down() // pin --
+{
+	Sl(1);
+	gpio_pull_down(S0);
+	Pop;
+}
+#endif /* GPIO */
+
+/* SPI ********************************** */
+#ifdef SPI
+prim P_spi_write_read_blocking() // spi inbuf outbuf len --
+{
+	Sl(4);
+	if(S3)
+	spi_write_read_blocking(spi1,(char *) S2,(char *) S1,S0);
+	else spi_write_read_blocking(spi0,(char *) S2,(char *) S1,S0);
+	Pop2;
+	Pop2;
+}
+
+prim P_spi_init() // spi baud --  (baud in Hz)
+{
+	if(S1)
+		spi_init(spi1,S0);
+	else spi_init(spi0,S0);
+	Pop2;
+}
+
+prim P_spi_deinit() // spi --
+{
+	if(S0)
+		spi_deinit(spi1);
+	else spi_deinit(spi0);
+	Pop;
+}
+
+prim P_spi_is_readable() // spi -- bool (non-zero if a read is possible)
+{
+	if(S0) {
+		if(spi_is_readable(spi1))
+			S0 = (stackitem) -1;
+		else S0 = (stackitem) 0; }
+	else {
+		if(spi_is_readable(spi0))
+			S0 = (stackitem) -1;
+		else S0 = (stackitem) 0; }
+}
+
+prim P_spi_is_writable() // spi -- bool (non-zero if a write is possible)
+{
+	if(S0) {
+		if(spi_is_writable(spi1))
+			S0 = (stackitem) -1;
+		else S0 = (stackitem) 0; }
+	else {
+		if(spi_is_writable(spi0))
+			S0 = (stackitem) -1;
+		else S0 = (stackitem) 0; }
+}
+
+prim P_spi_write_blocking() // spi outbuf len -- result
+{
+	int result;
+	if(S2)
+		result = spi_write_blocking(spi1,(char *) S1,S0);
+	else result = spi_write_blocking(spi0,(char *) S1,S0);
+	Pop2;
+	S0 = (stackitem) result;
+}
+
+prim P_spi_read_blocking() // spi dummy_byte inbuf len -- result
+{
+	int result;
+	if(S3)
+		result = spi_read_blocking(spi1,S2,(char *) S1,S0);
+	else result = spi_read_blocking(spi0,S2,(char *) S1,S0);
+	Pop2;
+	Pop;
+	S0 = (stackitem) result;
+}
+#endif /* SPI */
+
+/* ADC ******************************************* */
+#ifdef ADC
+
+prim P_adc_select_input() // input --
+{
+	Sl(1);
+	adc_select_input (S0);
+	Pop;
+}
+
+prim P_adc_init() // --
+{
+	adc_init();
+}
+
+prim P_adc_gpio_init() // pin --
+{
+	Sl(1);
+	adc_gpio_init(S0);
+	Pop;
+}
+
+prim P_adc_set_round_robin() // inputmask --
+{
+	Sl(1);
+	adc_set_round_robin(S0);
+	Pop;
+}
+
+//prim P_adc_rrobin()
+
+prim P_adc_set_temp_sensor_enabled() // bool --
+{
+	Sl(1);
+	adc_set_temp_sensor_enabled(S0);
+	Pop;
+}
+
+prim P_adc_read() // -- result
+{
+	So(1);
+	Push = (stackitem) adc_read();
+}
+
+prim P_adc_run() // bool --
+{
+	Sl(1);
+	adc_run(S0);
+	Pop;
+}
+
+prim P_adc_fifo_drain() //  --
+{
+	adc_fifo_drain();
+}
+
+prim P_adc_fifo_get() //  -- result
+{
+	So(1);
+	Push = (stackitem) adc_fifo_get();
+}
+
+prim P_adc_fifo_get_blocking() //  -- result
+{
+	So(1);
+	Push = (stackitem) adc_fifo_get_blocking();
+}
+
+prim P_adc_fifo_get_level() //  -- result
+{
+	So(1);
+	Push = (stackitem) adc_fifo_get_level();
+}
+
+prim P_adc_fifo_is_empty() //  -- result
+{
+	So(1);
+	Push = (stackitem) adc_fifo_is_empty();
+}
+
+prim P_adc_fifo_setup() // bool bool num bool bool --
+{
+	Sl(5);
+	adc_fifo_setup (S4,S3,S2,S1,S0);
+}
+
+prim P_adc_irq_set_enabled() // bool --
+{
+	Sl(1);
+	adc_irq_set_enabled(S0);
+}
+
+prim P_adc_set_clkdiv() // float --
+{
+	Sl(1);
+	adc_set_clkdiv(S0);
+}
+
+prim P_adc_temp() //  -- temp
+{
+	int result;
+	So(1);
+	adc_gpio_init(26);
+	adc_select_input(0);
+	result = adc_read();
+	Push = (stackitem) result * 33 / (1 << 12);
+}
+
+#endif /* ADC */
 
 #endif /* PICO */
 
@@ -2933,8 +3195,6 @@ static struct primfcn primt[] = {
     {"0QUIT", P_quit},
     {"0ABORT", P_abort},
     {"1ABORT\"", P_abortq},
-    {"0SLEEP", P_sleep},
-    {"0LONGSLEEP", P_longsleep},
 
 #ifdef SYSTEM
     {"0SYSTEM", P_system},
@@ -3025,9 +3285,41 @@ static struct primfcn primt[] = {
 #endif /* EVALUATE */
 	
 #ifdef PICO
-	{"0GPIOINIT", P_gpio_init},
-	{"0GPIOSETDIR", P_gpio_set_dir},
-	{"0GPIOPUT", P_gpio_put},
+        {"0SLEEP_MS", P_sleep_ms},
+	{"0SLEEP_US", P_sleep_us},
+	{"0GPIO_INIT", P_gpio_init},
+	{"0GPIO_SET_DIR", P_gpio_set_dir},
+	{"0GPIO_PUT", P_gpio_put},
+	{"0GPIO_GET", P_gpio_get},
+	{"0GPIO_GET_ALL", P_gpio_get_all},
+	{"0GPIO_PULL_DOWN", P_gpio_pull_down},
+	{"0GPIO_PULL_UP", P_gpio_pull_up},
+	{"0GPIO_SET_FUNCTION", P_gpio_set_function},
+	{"0GPIO_SET_IRQ_ENABLED_WITH_CALLBACK", P_gpio_set_irq_enabled_with_callback},
+	{"0GPIO_SET_PULLS", P_gpio_set_function},
+	{"0SPI_DEINIT", P_spi_deinit},
+	{"0SPI_INIT", P_spi_init},
+	{"0SPI_IS_READABLE", P_spi_is_readable},
+	{"0SPI_IS_WRITABLE", P_spi_is_writable},
+	{"0SPI_READ_BLOCKING", P_spi_read_blocking},
+	{"0SPI_WRITE_BLOCKING", P_spi_write_blocking},
+	{"0SPI_WRITE_READ_BLOCKING", P_spi_write_read_blocking},
+	{"0ADC_FIFO_DRAIN", P_adc_fifo_drain},
+	{"0ADC_FIFO_GET", P_adc_fifo_get},
+	{"0ADC_FIFO_GET_BLOCKING", P_adc_fifo_get_blocking},
+	{"0ADC_FIFO_GET_LEVEL", P_adc_fifo_get_level},
+	{"0ADC_FIFO_IS_EMPTY", P_adc_fifo_is_empty},
+	{"0ADC_FIFO_SETUP", P_adc_fifo_setup},
+	{"0ADC_GPIO_INIT", P_adc_gpio_init},
+	{"0ADC_INIT", P_adc_init},
+	{"0ADC_IRQ_SET_ENABLED", P_adc_irq_set_enabled},
+	{"0ADC_READ", P_adc_read},
+	{"0ADC_RUN", P_adc_run},
+	{"0ADC_SELECT_INPUT", P_adc_select_input},
+	{"0ADC_SET_CLKDIV", P_adc_set_clkdiv},
+	{"0ADC_SET_ROUND_ROBIN", P_adc_set_round_robin},
+	{"0ADC_SET_TEMP_SENSOR_ENABLED", P_adc_set_temp_sensor_enabled},
+	{"0ADC_TEMP", P_adc_temp},
 #endif /* PICO */
     {NULL, (codeptr) 0}
 };
@@ -3854,20 +4146,37 @@ static void ctrlc(sig)
 /*  MAIN  --  Main program.  */
 
 int main()
-{
-	//~ atl_stklen = 20;
-	//~ atl_rstklen = 100;
-	//~ atl_heaplen = 1000;
-	//~ atl_ltempstr = 32;
-	//~ atl_ntempstr = 2;
+{	
+// 	atl_stklen = 20;
+// 	atl_rstklen = 100;
+// 	atl_heaplen = 1000;
+//	atl_ltempstr = 512;
+//	atl_ntempstr = 2;
 	atl_init();
+#ifdef PICO
 	stdio_init_all();
+#ifdef UART
+	// Set up our UART
+	uart_init(UART_ID, BAUD_RATE);
+	// Set the TX and RX pins by using the function select on the GPIO
+	// Set datasheet for more information on function select
+	gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
+	gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
+#endif
+#ifdef SPI
+	gpio_set_function(PIN_MISO, GPIO_FUNC_SPI);
+	gpio_set_function(PIN_CS,   GPIO_FUNC_SIO);
+	gpio_set_function(PIN_SCK,  GPIO_FUNC_SPI);
+	gpio_set_function(PIN_MOSI, GPIO_FUNC_SPI);
 
-	sleep_ms(10000);
+	// Chip select is active-low, so we'll initialise it to a driven-high state
+	gpio_set_dir(PIN_CS, GPIO_OUT);
+	gpio_put(PIN_CS, 1);
+ #endif
+	sleep_ms(5000);
 	V printf("Length: %u\n%s\n",strlen(ATLAST),ATLAST);
-
+#endif /* PICO */
 	V atl_eval(ATLAST);
-//	while (TRUE) { }
     
 	return 0;
 }

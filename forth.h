@@ -1,11 +1,11 @@
-#define ATLAST "( Blink morse code p i c o ) \
-: setup 25 gpioinit 25 1 gpiosetdir ; \
-: sp 100 longsleep ; \
-: sh 25 1 gpioput sp 25 0 gpioput sp ; \
-: lo 25 1 gpioput sp sp sp 25 0 gpioput sp ; \
-: p sh lo lo sh ; \
-: i sh sh ; \
-: c lo sh lo sh ;  \
-: o lo lo lo ; \
-: blink begin p sp sp i sp sp c sp sp o sp sp sp sp sp sp again ; \
-setup blink"
+#define ATLAST "( Blink morse code pico ) \n\
+: setup 25 gpio_init 25 1 gpio_set_dir ; \n\
+: sp 100 sleep_ms ; \n\
+: sh 25 1 gpio_put sp 25 0 gpio_put sp ; \n\
+: lo 25 1 gpio_put sp sp sp 25 0 gpio_put sp ; \n\
+: p sh lo lo sh ; \n\
+: ii sh sh ; \n\
+: c lo sh lo sh ;  \n\
+: o lo lo lo ; \n\
+: blink begin p sp sp ii sp sp c sp sp o sp sp sp sp sp sp again ; \n\
+setup blink\n"

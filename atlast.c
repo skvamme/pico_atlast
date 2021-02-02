@@ -3028,10 +3028,14 @@ prim P_adc_set_clkdiv() // float --
 
 prim P_adc_temp() //  -- temp
 {
-	int result;
-	So(1);
-	result = adc_read();
-	Push = (stackitem) 27 - (result - 0.706) / 0.001721;
+	float r;
+	const float conversion_factor = 3.3f / (1 << 12);
+
+	So(Realsize);
+	uint16_t result = adc_read();
+	r = 27 - (result * conversion_factor - 0.706) / 0.001721;
+	stk += Realsize;
+	SREAL0(r);
 }
 
 #endif /* ADC */

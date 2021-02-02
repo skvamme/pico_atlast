@@ -2966,10 +2966,16 @@ prim P_adc_set_temp_sensor_enabled() // bool --
 	Pop;
 }
 
-prim P_adc_read() // -- result
+prim P_adc_read() // -- result (result is a float on the stack )
 {
-	So(1);
-	Push = (stackitem) adc_read();
+	float r;
+	const float conversion_factor = 3.3f / (1 << 12);
+
+	So(Realsize);
+	uint16_t result = adc_read();
+	r = result * conversion_factor;
+	stk += Realsize;
+	SREAL0(r);
 }
 
 prim P_adc_run() // bool --
@@ -3026,7 +3032,7 @@ prim P_adc_set_clkdiv() // float --
 	adc_set_clkdiv(S0);
 }
 
-prim P_adc_temp() //  -- temp
+prim P_adc_temp() //  -- temp ( temp is a float on the stack )
 {
 	float r;
 	const float conversion_factor = 3.3f / (1 << 12);

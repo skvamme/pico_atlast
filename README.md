@@ -94,7 +94,7 @@ ADC_SET_TEMP_SENSOR_ENABLED
 	( bool -- ) bool is 1 for enabled and 0 for disabled
 
 ADC_READ
-	(  -- result )
+	(  -- result ) result is a float, print it with f.
 
 ADC_RUN
 	( bool --  )
@@ -124,4 +124,4 @@ ADC_SET_CLKDIV
 	( number -- )
 
 ADC_TEMP
-	(  -- temp )
+	(  -- temp ) temp is a float, print it with f.

@@ -47,11 +47,11 @@ GPIO_PULL_UP
 GPIO_PULL_DOWN
 	( gpiopin --  )
 
-TODO: GPIO_SET_IRQ_ENABLED_WITH_CALLBACK
-	(  --  )
+GPIO_SET_IRQ_ENABLED_WITH_CALLBACK
+	( gpiopin events bool word --  ) events is a bimapped integer
 
-TODO: GPIO_SET_FUNCTION
-	(  --  )
+GPIO_SET_FUNCTION
+	( gpiopin function --  ) function is an integer, look it up in pico C API doc
 
 ******************SPI*******************
 

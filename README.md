@@ -33,7 +33,7 @@ GPIO_PUT
 	( gpiopin state --  ) state is 1 for high and 0 for low
 
 GPIO_GET
-	( gpiopin --  )
+	( gpiopin -- result )
 
 GPIO_GET_ALL
 	(  -- value ) value is a bit encoded integer

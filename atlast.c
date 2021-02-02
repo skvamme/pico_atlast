@@ -2769,14 +2769,25 @@ prim P_sleep_ms() // millisec ---
 
 /* GPIO ****************************************** */
 #ifdef GPIO
-prim P_gpio_set_irq_enabled_with_callback()
+// events is a bitmapped integer: bit0=lowlevel bit1=highlevel bit2=edgelow bit3=edgehigh
+prim P_gpio_set_irq_enabled_with_callback() // gpiopin events bool word --
 {
-	
+	Sl(4);
+	gpio_set_irq_enabled_with_callback(S3,S2,S1,(gpio_irq_callback_t ) S0);
+	Pop2;
+	Pop2;
 }
 
-prim P_gpio_set_function()
+// GPIO_FUNC_XIP = 0, GPIO_FUNC_SPI = 1, GPIO_FUNC_UART = 2, 
+//GPIO_FUNC_I2C = 3, GPIO_FUNC_PWM = 4,GPIO_FUNC_SIO = 5, 
+//GPIO_FUNC_PIO0 = 6, GPIO_FUNC_PIO1 = 7, GPIO_FUNC_GPCK = 8, 
+//GPIO_FUNC_USB = 9, GPIO_FUNC_NULL =0xf }
+
+prim P_gpio_set_function() // gpiopin function --
 {
-	
+	Sl(2);
+	gpio_set_function(S1,S0);
+	Pop2;
 }
 
 prim P_gpio_init() // pin ---
@@ -2790,16 +2801,14 @@ prim P_gpio_set_dir() // pin type --- (Type: 1=output, 0=input)
 {
 	Sl(2);
 	gpio_set_dir(S1, S0);
-	Pop;
-	Pop;
+	Pop2;
 }
 
 prim P_gpio_put() // pin state ---
 {
 	Sl(2);
 	gpio_put(S1, S0);
-	Pop;
-	Pop;
+	Pop2;
 }
 
 prim P_gpio_get() // pin --
@@ -2822,8 +2831,7 @@ prim P_gpio_set_pulls() // pin up down -- ( up and down are booleans 1=true 0=fa
 {
 	Sl(3);
 	gpio_set_pulls(S2,S1,S0);
-	Pop;
-	Pop;
+	Pop2;
 	Pop;
 }
 

@@ -68,6 +68,10 @@
 #define STRING                      /* String functions */
 #define SYSTEM                     /* System command function */
 #ifndef NOMEMCHECK
+#define MEMSTAT
+#define ALIGNMENT
+#define EXPORT
+#define READONLYSTRINGS
 #define TRACE			      /* Execution tracing */
 #define WALKBACK		      /* Walkback trace */
 #define WORDSUSED             /* Logging of words used and unused */
@@ -3026,10 +3030,8 @@ prim P_adc_temp() //  -- temp
 {
 	int result;
 	So(1);
-	adc_gpio_init(26);
-	adc_select_input(0);
 	result = adc_read();
-	Push = (stackitem) result * 33 / (1 << 12);
+	Push = (stackitem) 27 - (result - 0.706) / 0.001721;
 }
 
 #endif /* ADC */
@@ -4155,11 +4157,11 @@ static void ctrlc(sig)
 
 int main()
 {	
-// 	atl_stklen = 20;
-// 	atl_rstklen = 100;
-// 	atl_heaplen = 1000;
-//	atl_ltempstr = 512;
-//	atl_ntempstr = 2;
+ 	//~ atl_stklen = 20;
+ 	//~ atl_rstklen = 50;
+ 	//~ atl_heaplen = 500;
+	//~ atl_ltempstr = 32;
+	//~ atl_ntempstr = 2;
 	atl_init();
 #ifdef PICO
 	stdio_init_all();

@@ -1,6 +1,6 @@
 # pico_atlast 
 
-Get full access to the pico C API in atlast.c and use forth as a quick yet powerfull scripting engine in forth.h
+Get full access to the pico C API in atlast.c and use forth as a quick yet powerful scripting engine in forth.h
 
 Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
 

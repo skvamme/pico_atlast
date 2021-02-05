@@ -137,13 +137,13 @@ ADC_CONVERSION_FACTOR
 	
 **************MULTICORE*******************
 	
-MULTICORE_LAUNCH_CORE1
+TODO: MULTICORE_LAUNCH_CORE1
 	( word -- ) word is a compile address, get it with ['] It should never return
 
-MULTICORE_FIFO_POP_BLOCKING
+TODO: MULTICORE_FIFO_POP_BLOCKING
 	( -- result )
 
-MULTICORE_FIFO_PUSH_BLOCKING
+TODO: MULTICORE_FIFO_PUSH_BLOCKING
 	( value -- )
 
 

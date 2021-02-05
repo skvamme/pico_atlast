@@ -1,12 +1,14 @@
 # pico_atlast 
 
+Get full access to the pico C API in atlast.c and use forth as a quick yet powerfull scripting engine in forth.h
+
 Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
 
-Atlast Forth for Raspberry Pi Pico is a forth programming environment for the pico. 
+Atlast Forth for Raspberry Pi Pico is a boilerplate C application with a forth scripting environment. Put the forth code in the file forth.h and compile atlast.c in the cmake environment, see https://github.com/raspberrypi/pico-sdk 
 
-Put the forth code in the file forth.h and compile atlast.c in the cmake environment, see https://github.com/raspberrypi/pico-sdk
+If you make forth the main entry point, the forth code must contain an infinite loop, e.g. begin ... again to keep the application running. Otherwise, put the infinite loop in the main function in atlast.c An application on the pico should never return.
 
-Use the Makefile included in this repo to compile atlast.c to run on a Raspberry Pi or other host to be able to test your forth code before flashing to the pico. The forth code must contain an infinite loop, e.g. begin ... again to keep the application running.
+Use the Makefile included in this repo to compile atlast.c to run on a Raspberry Pi or other host to be able to test your forth code before flashing to the pico. Make sure to comment out #define PICO prior to compilation. Take a look at https://github.com/skvamme/atlast for some example forth code, coded for the pigpio library. API names and functions are very similar to the pico C API.
 
 Read the PICO documentation for the C/C++ API for a detailed description of each function.
 
@@ -52,7 +54,11 @@ GPIO_SET_IRQ_ENABLED_WITH_CALLBACK
 
 GPIO_SET_FUNCTION
 	( gpiopin function --  ) function is an integer, look it up in pico C API doc
-
+	
+GPIO_SET_IRQ_ENABLED_WITH_CALLBACK
+	( pin events bool word -- ) word is the compile address, use ['] word to get it
+	events is a bitmapped integer, see C API document
+	
 ******************SPI*******************
 
 SPI_WRITE_READ_BLOCKING
@@ -125,3 +131,19 @@ ADC_SET_CLKDIV
 
 ADC_TEMP
 	(  -- temp ) temp is a float, print it with f.
+
+ADC_CONVERSION_FACTOR
+	( volt -- result ) float volt is the adc reference voltage
+	
+**************MULTICORE*******************
+	
+MULTICORE_LAUNCH_CORE1
+	( word -- ) word is a compile address, get it with ['] It should never return
+
+MULTICORE_FIFO_POP_BLOCKING
+	( -- result )
+
+MULTICORE_FIFO_PUSH_BLOCKING
+	( value -- )
+
+

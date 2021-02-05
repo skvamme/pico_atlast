@@ -4,7 +4,7 @@ Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a qu
 
 Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
 
-Atlast Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment. Put the forth code in the file forth.h and compile atlast.c in the cmake environment, see https://github.com/raspberrypi/pico-sdk 
+Atlast Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment. Put the forth code in the file forth.h and compile atlast.c with cmake and make, see https://github.com/raspberrypi/pico-sdk 
 
 If you make forth the main entry point, the forth code must contain an infinite loop, e.g. begin ... again to keep the application running. Otherwise, put the infinite loop in the main function in atlast.c An application on the pico should never return.
 

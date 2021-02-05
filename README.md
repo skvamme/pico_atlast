@@ -6,7 +6,7 @@ Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/startin
 
 Atlast Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment. Put the forth code in the file forth.h and compile atlast.c with cmake and make, see https://github.com/raspberrypi/pico-sdk 
 
-If you make forth the main entry point, the forth code must contain an infinite loop, e.g. begin ... again to keep the application running. Otherwise, put the infinite loop in the main function in atlast.c An application on the pico should never return.
+If forth is the main entry point, the forth code must contain an infinite loop, e.g. begin ... again to keep the application running. Otherwise, put the infinite loop in the main function in atlast.c An application on the pico should never return.
 
 Use the Makefile included in this repo to compile atlast.c to run on a Raspberry Pi or other host to be able to test your forth code before flashing to the pico. Make sure to comment out #define PICO prior to compilation. Take a look at https://github.com/skvamme/atlast for some example forth code, coded for the pigpio library. API names and functions are very similar to the pico C API.
 

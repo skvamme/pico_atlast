@@ -1,4 +1,4 @@
-#define ATLAST "( Blink temp Celsius 0 - 24 deg) \n\
+#define ATLAST "( Blink morse code temp Celsius 0 - 24 deg) \n\
 : sp 100 sleep_ms ; \n\
 : dot 25 1 gpio_put sp 25 0 gpio_put sp ; \n\
 : dash 25 1 gpio_put sp sp sp 25 0 gpio_put sp ; \n\

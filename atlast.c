@@ -87,22 +87,43 @@
 #endif
 
 #include "atldef.h"
-#include "pico/stdlib.h"
-#include "hardware/adc.h"
-#include "hardware/gpio.h"
-#include "hardware/spi.h"
-
+#include "forth.h"
 
 #ifdef PICO
+#include "pico/stdlib.h"
+#include "hardware/spi.h"
+#include "hardware/adc.h"
+
 #define GPIO
 #define SPI
 #define ADC
+#define MULTICORE
+#define WATCHDOG
+#define QUEUE
+
+#ifdef MULTICORE
+#include "pico/multicore.h"
+#endif
+
+#ifdef QUEUE
+#include "pico/util/queue.h"
+#endif
+
+#ifdef WATCHDOG
+#include "hardware/watchdog.h"
+#endif
+
+#ifdef GPIO
+#include "hardware/gpio.h"
+#endif
+
 #ifdef SPI
 #define PIN_MISO 16
 #define PIN_CS   17
 #define PIN_SCK  18
 #define PIN_MOSI 19
 #endif
+
 #ifdef UART
 #include "hardware/uart.h"
 #define UART_ID uart1
@@ -115,7 +136,6 @@
 #include "hardware/pio.h"
 #endif
 
-#include "forth.h"
 #endif /* PICO */
 
 /* LINTLIBRARY */
@@ -2852,6 +2872,10 @@ prim P_gpio_pull_down() // pin --
 	gpio_pull_down(S0);
 	Pop;
 }
+
+// enum  gpio_irq_level  {  GPIO_IRQ_LEVEL_LOW  =  0x1u,  GPIO_IRQ_LEVEL_HIGH  =  0x2u,  
+//	GPIO_IRQ_EDGE_FALL  =  0x4u,GPIO_IRQ_EDGE_RISE = 0x8u }
+
 #endif /* GPIO */
 
 /* SPI ********************************** */
@@ -3032,6 +3056,15 @@ prim P_adc_set_clkdiv() // float --
 	adc_set_clkdiv(S0);
 }
 
+prim P_adc_conversion_factor() // volt -- result
+{
+	float result;
+	
+	Sl(Realsize);
+	result = REAL0 / (1 << 12);
+	SREAL0(result);
+}
+
 prim P_adc_temp() //  -- temp ( temp is a float on the stack )
 {
 	float r;
@@ -3046,6 +3079,164 @@ prim P_adc_temp() //  -- temp ( temp is a float on the stack )
 
 #endif /* ADC */
 
+#ifdef MULTICORE
+/* MULTICORE ******************************************* */
+
+prim P_multicore_launch_core1() // word --  ( word should not return )
+{
+	Sl(1);
+	multicore_launch_core1( (void (*)(void)) S0); 
+	Pop;
+}
+
+prim P_multicore_fifo_pop_blocking() // -- result
+{
+	int result;
+	
+	So(1);
+	result=multicore_fifo_pop_blocking();
+	Push = (stackitem) result;
+}
+
+prim P_multicore_fifo_push_blocking() // value --
+{
+	Sl(1);
+	multicore_fifo_push_blocking(S0);
+	Pop;
+}
+
+#endif /* MULTICORE */
+
+#ifdef WATCHDOG
+prim P_watchdog_enable() // millisec bool --
+{
+	Sl(2);
+	watchdog_enable(S1,S0);
+	Pop2;
+}
+
+prim P_watchdog_update() //  --
+{
+	watchdog_update();
+}
+#endif /* WATCHDOG */
+
+#ifdef QUEUE
+/*
+PICO_SPINLOCK_ID_IRQ 9
+PICO_SPINLOCK_ID_TIMER 10
+PICO_SPINLOCK_ID_HARDWARE_CLAIM 11
+PICO_SPINLOCK_ID_STRIPED_FIRST 16
+PICO_SPINLOCK_ID_STRIPED_LAST 23
+PICO_SPINLOCK_ID_CLAIM_FREE_FIRST 24
+PICO_SPINLOCK_ID_CLAIM_FREE_END 31
+*/
+
+prim P_queue_init_with_spinlock() // que size count spinlock -- 
+{
+	Sl(4);
+	queue_init_with_spinlock ((queue_t *)S3, S2, S1, S0);
+	Pop2;
+	Pop2;
+}
+
+prim P_queue_init() // que size count --
+{
+	Sl(3);
+	queue_init ((queue_t *)S2, S1, S0);
+	Pop2;
+	Pop;
+}
+
+prim P_queue_free() // que --
+{
+	Sl(1);
+	queue_free ((queue_t *)S0);
+	Pop;
+}
+
+prim P_queue_get_level_unsafe() // que -- result
+{
+	int result;
+	Sl(1);
+	queue_get_level_unsafe ((queue_t *)S0);
+	S0 = (stackitem) result;
+}
+
+prim P_queue_get_level() // que -- result
+{
+	int result;
+	Sl(1);
+	result = queue_get_level ((queue_t *)S0);
+	S0 = (stackitem) result;
+}
+
+prim P_queue_is_empty() // que -- bool
+{
+	int result;
+	Sl(1);
+	result = queue_is_empty ((queue_t *)S0);
+	S0  = (stackitem) result;
+}
+
+prim P_queue_is_full() // que -- bool
+{
+	int result;
+	Sl(1);
+	result = queue_is_full((queue_t *)S0);
+	S0  = (stackitem) result;
+}
+
+prim P_queue_try_add() // que data -- bool
+{
+	int result;
+	
+	Sl(2);
+	result = queue_try_add ((queue_t *)S1, (void *)S0);
+	Pop;
+	S0 = (stackitem) result;
+}
+
+prim P_queue_try_remove() // que data -- bool
+{
+	int result;
+	Sl(2);
+	queue_try_remove ((queue_t *)S1, (void *)S0);
+	Pop;
+	S0 = (stackitem) result;
+}
+
+prim P_queue_try_peek() // que data -- bool
+{
+	int result;
+	Sl(2);
+	result = queue_try_peek ((queue_t *)S1, (void *)S0);
+	Pop;
+	S0 = (stackitem) result;
+}
+
+prim P_queue_add_blocking() // que data --
+{
+	Sl(2);
+	queue_add_blocking ((queue_t *)S1, (void *)S0);
+	Pop2;
+}
+
+prim P_queue_remove_blocking() // que data --
+{
+	Sl(2);
+	queue_remove_blocking ((queue_t *)S1, (void *)S0);
+	Pop2;
+}
+
+prim P_queue_peek_blocking() // que data --
+{
+	Sl(2);
+	queue_peek_blocking ((queue_t *)S1, (void *)S0);
+	Pop2;
+}
+
+#endif /* QUEUE */
 #endif /* PICO */
 
 /*  Table of primitive words  */
@@ -3317,6 +3508,7 @@ static struct primfcn primt[] = {
 	{"0GPIO_SET_FUNCTION", P_gpio_set_function},
 	{"0GPIO_SET_IRQ_ENABLED_WITH_CALLBACK", P_gpio_set_irq_enabled_with_callback},
 	{"0GPIO_SET_PULLS", P_gpio_set_function},
+#ifdef SPI
 	{"0SPI_DEINIT", P_spi_deinit},
 	{"0SPI_INIT", P_spi_init},
 	{"0SPI_IS_READABLE", P_spi_is_readable},
@@ -3324,6 +3516,8 @@ static struct primfcn primt[] = {
 	{"0SPI_READ_BLOCKING", P_spi_read_blocking},
 	{"0SPI_WRITE_BLOCKING", P_spi_write_blocking},
 	{"0SPI_WRITE_READ_BLOCKING", P_spi_write_read_blocking},
+#endif
+#ifdef ADC
 	{"0ADC_FIFO_DRAIN", P_adc_fifo_drain},
 	{"0ADC_FIFO_GET", P_adc_fifo_get},
 	{"0ADC_FIFO_GET_BLOCKING", P_adc_fifo_get_blocking},
@@ -3340,6 +3534,32 @@ static struct primfcn primt[] = {
 	{"0ADC_SET_ROUND_ROBIN", P_adc_set_round_robin},
 	{"0ADC_SET_TEMP_SENSOR_ENABLED", P_adc_set_temp_sensor_enabled},
 	{"0ADC_TEMP", P_adc_temp},
+	{"0ADC_CONVERSION_FACTOR", P_adc_conversion_factor},
+#endif
+#ifdef MULTICORE
+	{"0MULTICORE_LAUNCH_CORE1",P_multicore_launch_core1},
+	{"0MULTICORE_FIFO_POP_BLOCKING",P_multicore_fifo_pop_blocking},
+	{"0MULTICORE_FIFO_PUSH_BLOCKING",P_multicore_fifo_push_blocking},
+#endif
+#ifdef WATCHDOG
+	{"0WATCHDOG_ENABLE",P_watchdog_enable},
+	{"0WATCHDOG_UPDATE",P_watchdog_update},
+#endif
+#ifdef QUEUE
+	{"0QUEUE_INIT_WITH_SPINLOCK",P_queue_init_with_spinlock},
+	{"0QUEUE_INIT",P_queue_init},
+	{"0QUEUE_FREE",P_queue_free},
+	{"0QUEUE_GET_LEVEL_UNSAFE",P_queue_get_level_unsafe},
+	{"0QUEUE_GET_LEVEL",P_queue_get_level},
+	{"0QUEUE_IS_EMPTY",P_queue_is_empty},
+	{"0QUEUE_IS_FULL",P_queue_is_full},
+	{"0QUEUE_TRY_ADD",P_queue_try_add},
+	{"0QUEUE_TRY_REMOVE",P_queue_try_remove},
+	{"0QUEUE_TRY_PEEK",P_queue_try_peek},
+	{"0QUEUE_ADD_BLOCKING",P_queue_add_blocking},
+	{"0QUEUE_REMOVE_BLOCKING",P_queue_remove_blocking},
+	{"0QUEUE_PEEK_BLOCKING",P_queue_peek_blocking},
+#endif
 #endif /* PICO */
     {NULL, (codeptr) 0}
 };

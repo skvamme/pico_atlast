@@ -49,14 +49,11 @@ GPIO_PULL_UP
 GPIO_PULL_DOWN
 	( gpiopin --  )
 
-GPIO_SET_IRQ_ENABLED_WITH_CALLBACK
-	( gpiopin events bool word --  ) events is a bimapped integer
-
 GPIO_SET_FUNCTION
 	( gpiopin function --  ) function is an integer, look it up in pico C API doc
 	
 GPIO_SET_IRQ_ENABLED_WITH_CALLBACK
-	( pin events bool word -- ) word is the compile address, use ['] word to get it
+	( gpiopin events bool word -- ) word is the compile address, use ['] word to get it
 	events is a bitmapped integer, see C API document
 	
 ******************SPI*******************
@@ -137,13 +134,61 @@ ADC_CONVERSION_FACTOR
 	
 **************MULTICORE*******************
 	
-TODO: MULTICORE_LAUNCH_CORE1
+MULTICORE_LAUNCH_CORE1
 	( word -- ) word is a compile address, get it with ['] It should never return
 
-TODO: MULTICORE_FIFO_POP_BLOCKING
+MULTICORE_FIFO_POP_BLOCKING
 	( -- result )
 
-TODO: MULTICORE_FIFO_PUSH_BLOCKING
+MULTICORE_FIFO_PUSH_BLOCKING
 	( value -- )
 
+**************WATCHDOG*******************
+
+WATCHDOG_ENABLE
+	( millisec bool -- )
+	
+WATCHDOG_UPDATE
+	(  --  )
+	
+**************QUEUE*******************
+
+QUEUE_INIT_WITH_SPINLOCK
+	( que size count spinlock --  )
+	
+QUEUE_INIT
+	( que size count -- )
+	
+QUEUE_FREE
+	( que -- )
+	
+QUEUE_GET_LEVEL_UNSAFE
+	( que -- result )
+	
+QUEUE_GET_LEVEL
+	( que -- result )
+	
+QUEUE_IS_EMPTY
+	( que -- bool )
+	
+QUEUE_IS_FULL
+	( que -- bool )
+	
+QUEUE_TRY_ADD
+	( que data -- bool )
+	
+QUEUE_TRY_REMOVE
+	( que data -- bool )
+	
+QUEUE_TRY_PEEK
+	( que data -- bool )
+	
+QUEUE_ADD_BLOCKING
+	( que data -- )
+	
+QUEUE_REMOVE_BLOCKING
+	( que data -- )
+	
+QUEUE_PEEK_BLOCKING
+	( que data -- )
 

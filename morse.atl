@@ -1,0 +1,42 @@
+( Blink morse code temp Celsius 0 - 28 deg ) 
+: sp 100 sleep_ms ; 
+: dot 25 1 gpio_put sp 25 0 gpio_put sp ; 
+: dash 25 1 gpio_put sp sp sp 25 0 gpio_put sp ; 
+
+: w0 dash dash dash dash dash ; 
+: w1 dot dash dash dash dash ; 
+: w2 dot dot dash dash dash ; 
+: w3 dot dot dot dash dash ; 
+: w4 dot dot dot dot dash ; 
+: w5 dot dot dot dot dot ; 
+: w6 dash dot dot dot dot ; 
+: w7 dash dash dot dot dot ; 
+: w8 dash dash dash dot dot ; 
+: w9 dash dash dash dash dot ; 
+: w10 w1 sp sp w0 ; 
+: w11 w1 sp sp w1 ; 
+: w12 w1 sp sp w2 ; 
+: w13 w1 sp sp w3 ; 
+: w14 w1 sp sp w4 ; 
+: w15 w1 sp sp w5 ; 
+: w16 w1 sp sp w6 ; 
+: w17 w1 sp sp w7 ; 
+: w18 w1 sp sp w8 ; 
+: w19 w1 sp sp w9 ; 
+: w20 w2 sp sp w0 ; 
+: w21 w2 sp sp w1 ; 
+: w22 w2 sp sp w2 ; 
+: w23 w2 sp sp w3 ; 
+: w24 w2 sp sp w4 ; 
+: w25 w2 sp sp w5 ; 
+: w26 w2 sp sp w6 ; 
+: w27 w2 sp sp w7 ; 
+: w28 w2 sp sp w8 ; 
+
+: stuff ['] w28 ['] w27 ['] w26 ['] w25 ['] w24 ['] w23 ['] w22 ['] w21 ['] w20 ['] w19 ['] w18 ['] w17 ['] w16 
+['] w15 ['] w14 ['] w13 ['] w12 ['] w11 ['] w10 ['] w9 ['] w8 ['] w7 ['] w6 ['] w5 ['] w4 ['] w3 ['] w2 ['] w1 ['] w0 ; 
+
+: setup 25 gpio_init 25 1 gpio_set_dir 10000 1 watchdog_enable
+stuff adc_init 26 adc_gpio_init 1 adc_set_temp_sensor_enabled 4 adc_select_input ;
+
+: go setup begin adc_temp fix dup . cr pick execute 500 sleep_ms watchdog_update again ; 

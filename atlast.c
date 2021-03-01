@@ -51,7 +51,7 @@
 
 #ifndef INDIVIDUALLY
 #define ARRAY			      /* Array subscripting words */
-#define BREAK			      /* Asynchronous break facility */
+//#define BREAK			      /* Asynchronous break facility */
 #define COMPILERW		      /* Compiler-writing words */
 #define CONIO			      /* Interactive console I/O */
 #define DEFFIELDS		      /* Definition field access for words */
@@ -61,20 +61,20 @@
 #define PICO                          /* Raspberry Pi PICO functions */
 #define MATH			      /* Math functions */
 #define MEMMESSAGE           /* Print message for stack/heap errors */
-#define PROLOGUE		      /* Prologue processing and auto-init */
+//#define PROLOGUE		      /* Prologue processing and auto-init */
 #define REAL			      /* Floating point numbers */
 #define SHORTCUTA		      /* Shortcut integer arithmetic words */
 #define SHORTCUTC		      /* Shortcut integer comparison */
 #define STRING                      /* String functions */
-#define SYSTEM                     /* System command function */
+//#define SYSTEM                     /* System command function */
 #ifndef NOMEMCHECK
 #define MEMSTAT
 #define ALIGNMENT
 #define EXPORT
-#define READONLYSTRINGS
+//#define READONLYSTRINGS
 #define TRACE			      /* Execution tracing */
 #define WALKBACK		      /* Walkback trace */
-#define WORDSUSED             /* Logging of words used and unused */
+//#define WORDSUSED             /* Logging of words used and unused */
 #define HIGHC	                      /* Don't use SIGINT */
 #endif /* NOMEMCHECK */
 #endif /* !INDIVIDUALLY */
@@ -95,7 +95,7 @@
 #include "hardware/adc.h"
 
 #define GPIO
-#define SPI
+//#define SPI
 #define ADC
 #define MULTICORE
 #define WATCHDOG
@@ -176,7 +176,7 @@ typedef enum {False = 0, True = 1} Boolean;
 
 /*  Globals visible to calling programs  */
 
-atl_int atl_stklen = 1000;	      /* Evaluation stack length */
+atl_int atl_stklen = 100;	      /* Evaluation stack length */
 atl_int atl_rstklen = 100;	      /* Return stack length */
 atl_int atl_heaplen = 1000;	      /* Heap length */
 atl_int atl_ltempstr = 256;	      /* Temporary string buffer length */
@@ -319,9 +319,9 @@ static char *alloc(size)
 {
     char *cp = malloc(size);
 
-/* printf("\nAlloc %u", size); */
+V fprintf(stderr,"\nAlloc %u", size);
     if (cp == NULL) {
-        V fprintf(stderr, "\n\nOut of memory!  %u bytes requested.\n", size);
+        V fprintf(stderr,"\n\nOut of memory!  %u bytes requested.\n", size);
 	abort();
     }
     return cp;
@@ -2791,6 +2791,14 @@ prim P_sleep_ms() // millisec ---
 	Pop;
 }
 
+prim P_time_us() //  -- timestamp
+{
+	So(1);
+	int result;
+	result =  time_us_32();
+	Push = (stackitem) result;
+}
+
 /* GPIO ****************************************** */
 #ifdef GPIO
 // events is a bitmapped integer: bit0=lowlevel bit1=highlevel bit2=edgelow bit3=edgehigh
@@ -2990,16 +2998,10 @@ prim P_adc_set_temp_sensor_enabled() // bool --
 	Pop;
 }
 
-prim P_adc_read() // -- result (result is a float on the stack )
+prim P_adc_read() // -- result 
 {
-	float r;
-	const float conversion_factor = 3.3f / (1 << 12);
-
-	So(Realsize);
-	uint16_t result = adc_read();
-	r = result * conversion_factor;
-	stk += Realsize;
-	SREAL0(r);
+	So(1);
+	Push = (stackitem) adc_read();
 }
 
 prim P_adc_run() // bool --
@@ -3237,6 +3239,8 @@ prim P_queue_peek_blocking() // que data --
 }
 
 #endif /* QUEUE */
+
+
 #endif /* PICO */
 
 /*  Table of primitive words  */
@@ -3498,6 +3502,7 @@ static struct primfcn primt[] = {
 #ifdef PICO
         {"0SLEEP_MS", P_sleep_ms},
 	{"0SLEEP_US", P_sleep_us},
+	{"0TIME_US", P_time_us},
 	{"0GPIO_INIT", P_gpio_init},
 	{"0GPIO_SET_DIR", P_gpio_set_dir},
 	{"0GPIO_PUT", P_gpio_put},
@@ -4387,11 +4392,17 @@ static void ctrlc(sig)
 
 int main()
 {	
- 	//~ atl_stklen = 20;
- 	//~ atl_rstklen = 50;
- 	//~ atl_heaplen = 500;
-	//~ atl_ltempstr = 32;
-	//~ atl_ntempstr = 2;
+//    Evaluation (data) stack length. Expressed as a number of 4 byte stack items. Default 100. 
+	atl_stklen = 100;
+//    Return stack length. Expressed as a number of 4 byte return stack pointer items. Default 100. 
+	atl_rstklen = 100;
+//    Heap length. Specified as a number of 4 byte stack items. Default 1000. 
+	atl_heaplen = 1000;
+//    Temporary string length. Gives the length of the buffers used to hold temporary strings entered in 
+//	interpretive mode and created by certain primitives. Default 256. 
+	atl_ltempstr = 32;
+//	Number of temporary strings.
+	atl_ntempstr = 25;
 	atl_init();
 #ifdef PICO
 	stdio_init_all();
@@ -4412,9 +4423,9 @@ int main()
 	// Chip select is active-low, so we'll initialise it to a driven-high state
 	gpio_set_dir(PIN_CS, GPIO_OUT);
 	gpio_put(PIN_CS, 1);
- #endif
-	sleep_ms(5000);
-	V printf("Length: %u\n%s\n",strlen(ATLAST),ATLAST);
+ #endif /* SPI */
+//	sleep_ms(5000); /* Time to start a terminal */
+//	V printf("Length: %u\n%s\n",strlen(ATLAST),ATLAST);
 #endif /* PICO */
 	V atl_eval(ATLAST);
     

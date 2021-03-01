@@ -1,14 +1,20 @@
 # pico_atlast 
 
-Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine in forth.h
+Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine.
 
 Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
 
-Atlast Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment. Put the forth code in the file forth.h and compile atlast.c with cmake and make, see https://github.com/raspberrypi/pico-sdk 
+Atlast Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment. 
 
-If forth is the main entry point, the forth code must contain an infinite loop, e.g. begin ... again to keep the application running. Otherwise, put the infinite loop in the main function in atlast.c An application on the pico should never return.
+1. Put the forth code in a file, I use anyname.atl. Make sure to keep source line lengt below 132 characters.
 
-Use the Makefile included in this repo to compile atlast.c to run on a Raspberry Pi or other host to be able to test your forth code before flashing to the pico. Make sure to comment out #define PICO prior to compilation. Take a look at https://github.com/skvamme/atlast for some example forth code, coded for the pigpio library. API names and functions are very similar to the pico C API.
+2. Run "./atl2h anyname.atl" to create the file forth.h. 
+
+3. Compile atlast.c with make in the build directory, see https://github.com/raspberrypi/pico-sdk 
+
+If forth is the main entry point, the forth code must contain a word "GO" with an infinite loop, e.g. begin ... again to keep the application running. Otherwise, put the infinite loop in the main function in atlast.c An application on the pico should never return.
+
+Use the Makefile included in this repo to compile atlast.c to run on a Raspberry Pi or other host to be able to test your forth code before flashing to the pico. Make sure to comment out #define PICO on line 61 in atlast.c prior to compilation. Take a look at https://github.com/skvamme/atlast for some example forth code, coded for the pigpio library. API names and functions are very similar to the pico C API.
 
 Read the PICO documentation for the C/C++ API for a detailed description of each function.
 
@@ -25,6 +31,12 @@ This can be illustrated in this way: ( microsec -- )
 SLEEP_MS
 	( millisec -- )
 
+SLEEP_US
+	( microsek -- )
+
+TIME_US
+	(  --  timestamp ) This value wraps roughly every 1 hour 11 minutes and 35 seconds.
+	
 GPIO_INIT
 	( gpiopin --  )
 

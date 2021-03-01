@@ -1,0 +1,10 @@
+( simple LED blink on pico )
+: setup 25 gpio_init 25 1 gpio_set_dir ;
+
+: sleep 500 sleep_ms ;
+
+: on 25 1 gpio_put ;
+
+: off 25 0 gpio_put ;
+
+: go setup begin on sleep off sleep again ;

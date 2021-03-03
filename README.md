@@ -32,10 +32,19 @@ SLEEP_MS
 	( millisec -- )
 
 SLEEP_US
-	( microsek -- )
+	( msb lsb -- )  64 bit microsec value. A 64 bit integer is represented by two 32 bit integers on the stack.
 
 TIME_US
-	(  --  timestamp ) This value wraps roughly every 1 hour 11 minutes and 35 seconds.
+	(  --  msb lsb ) This 2x32 bit value is microseconds since power up. A 64 bit unsigned int. It newer wraps.
+	
+TIME_DIFF
+	( msb1 lsb1 msb2 lsb2 -- msb lsb ) Diff between two 64 bit timestamps.  Returns a 64 bit unsigned int.
+	
+U64.
+	( msb lsb -- ) Print unsigned 64 bit integer
+
+U.
+	( integer -- ) Print unsigned 32 bit integer.
 	
 GPIO_INIT
 	( gpiopin --  )

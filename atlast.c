@@ -2777,11 +2777,13 @@ prim P_fwdresolve()		      /* Emit forward jump offset */
 
 #ifdef PICO
 
-prim P_sleep_us() // microsec --- 
+prim P_sleep_us() // msb lsb ---  /* 64 bit microsec */
 { 
-	Sl(1);
-	busy_wait_us_32 (S0);
-	Pop;
+	Sl(2);
+	uint64_t result;
+	result = ((uint64_t) S1) << 32 | (uint32_t) S0;
+	sleep_us(result);
+	Pop2;
 }
 
 prim P_sleep_ms() // millisec ---
@@ -2791,13 +2793,53 @@ prim P_sleep_ms() // millisec ---
 	Pop;
 }
 
-prim P_time_us() //  -- timestamp
+prim P_time_us() //  -- msb lsb  /* 64 bit timestamp */
 {
-	So(1);
-	int result;
-	result =  time_us_32();
-	Push = (stackitem) result;
+	So(2);
+	uint64_t result;
+	uint32_t msb;
+	uint32_t lsb;
+	
+	result =  time_us_64();
+	msb = (uint32_t) (result >>32);
+	lsb = (uint32_t) result;
+	
+	Push = (stackitem) msb;
+	Push = (stackitem) lsb;
 }
+
+prim P_uint64_dot() // msb lsb --
+{
+	Sl(2);
+	uint64_t result;
+	result = ((uint64_t) S1) << 32 | (uint32_t) S0;
+	V printf(base == 16 ? "%llX" : "%llu ", result);
+	Pop2;
+}
+
+prim P_uint32_dot() // uint32 --
+{
+	Sl(1);
+	V printf(base == 16 ? "%lX" : "%lu ", (uint32_t) S0);
+	Pop;
+}
+
+prim P_time_diff() // msb1 lsb1 msb2 lsb2 -- msb lsb /* Diff between 64 bit timestamps as 64 bit */
+{
+	Sl(4);
+	uint64_t t1, t2, result;
+
+	t1 = ((uint64_t) S1) << 32 | (uint32_t) S0;
+	t2 = ((uint64_t) S3) << 32 | (uint32_t) S2;
+	if(t1 >=t2)
+		result = t1-t2;
+	else
+		result = t2-t1;
+	Pop2;
+	S1 = (stackitem) (result >>32);
+	S0 = (stackitem) result;
+}
+
 
 /* GPIO ****************************************** */
 #ifdef GPIO
@@ -3503,6 +3545,9 @@ static struct primfcn primt[] = {
         {"0SLEEP_MS", P_sleep_ms},
 	{"0SLEEP_US", P_sleep_us},
 	{"0TIME_US", P_time_us},
+	{"0U64.", P_uint64_dot},
+	{"0U.", P_uint32_dot},
+	{"0TIME_DIFF", P_time_diff},
 	{"0GPIO_INIT", P_gpio_init},
 	{"0GPIO_SET_DIR", P_gpio_set_dir},
 	{"0GPIO_PUT", P_gpio_put},

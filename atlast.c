@@ -2492,15 +2492,17 @@ prim P_bracktick()		      /* Compile in-line code address */
 					 word in compile stream */
 }
 
-prim P_execute()		      /* Execute word pointed to by stack */
+prim P_execute()		        /* Execute word pointed to by stack */
 {
     dictword *wp;
+    dictword **sip = ip;              /* skvamme save instruction pointer */
 
     Sl(1);
     wp = (dictword *) S0;	      /* Load word address from stack */
-    Pop;			      /* Pop data stack before execution */
-    exword(wp); 		      /* Recursively call exword() to run
-					 the word. */
+    Pop;			              /* Pop data stack before execution */
+    ip = NULL;                          /* skvamme reset instruction pointer */
+    exword(wp); 		      /* Recursively call exword() to run the word. */
+    ip = sip;                             /* skvamme restore instruction pointer */
 }
 
 prim P_body()			      /* Get body address for word */

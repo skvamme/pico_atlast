@@ -6,13 +6,13 @@ Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/startin
 
 Atlast Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment. 
 
-1. Put the forth code in a file, I use anyname.atl. Make sure to keep source line lengt below 132 characters.
+1. Put the forth code in a file, I use "anyname.atl". Make sure to keep source line width max column 132.
 
 2. Run "./atl2h anyname.atl" to create the file forth.h. 
 
 3. Compile atlast.c with make in the build directory, see https://github.com/raspberrypi/pico-sdk 
 
-If forth is the main entry point, the forth code must contain a word "GO" with an infinite loop, e.g. begin ... again to keep the application running. Otherwise, put the infinite loop in the main function in atlast.c An application on the pico should never return.
+If forth is the main entry point, the forth code must contain a word "GO" with an infinite loop, e.g. begin ... again to keep the application running. Otherwise, put the infinite loop in the main function in atlast.c and define the forth word "GO" doing nothing. An application on the pico should never return.
 
 Use the Makefile included in this repo to compile atlast.c to run on a Raspberry Pi or other host to be able to test your forth code before flashing to the pico. Make sure to comment out #define PICO on line 61 in atlast.c prior to compilation. Take a look at https://github.com/skvamme/atlast for some example forth code, coded for the pigpio library. API names and functions are very similar to the pico C API.
 
@@ -20,13 +20,13 @@ Read the PICO documentation for the C/C++ API for a detailed description of each
 
 Defined words:
 
-SLEEP_US
+SLEEP_MS
 
-Stack before: integer number of microseconds to sleep
+Stack before: integer number of milliseconds to sleep
 	
 This word leaves nothing at the stack
 	
-This can be illustrated in this way: ( microsec -- )
+This can be illustrated in this way: ( millisec -- )
 
 SLEEP_MS
 	( millisec -- )
@@ -35,7 +35,7 @@ SLEEP_US
 	( msb lsb -- )  64 bit microsec value. A 64 bit integer is represented by two 32 bit integers on the stack.
 
 TIME_US
-	(  --  msb lsb ) This 2x32 bit value is microseconds since power up. A 64 bit unsigned int. It newer wraps.
+	(  --  msb lsb ) This 2x32 bit value is microseconds since power up. A 64 bit unsigned int. It never wraps.
 	
 TIME_DIFF
 	( msb1 lsb1 msb2 lsb2 -- msb lsb ) Diff between two 64 bit timestamps.  Returns a 64 bit unsigned int.

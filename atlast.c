@@ -93,6 +93,15 @@
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
 #include "hardware/adc.h"
+#include <tusb.h>
+#define L 132
+unsigned char str[L+1];
+
+unsigned char *readLine() {
+  unsigned char u, *p;
+  for(p=str, u=getchar(); u!='\r' && p-str<L; u=getchar())  putchar(*p++=u);
+  *p = 0;  return str;
+}
 
 #define GPIO
 //#define SPI
@@ -4438,7 +4447,10 @@ static void ctrlc(sig)
 /*  MAIN  --  Main program.  */
 
 int main()
-{	
+{
+    FILE *ifp;
+    int fname = FALSE, defmode = FALSE;
+	
 //    Evaluation (data) stack length. Expressed as a number of 4 byte stack items. Default 100. 
 	atl_stklen = 100;
 //    Return stack length. Expressed as a number of 4 byte return stack pointer items. Default 100. 
@@ -4470,11 +4482,21 @@ int main()
 	// Chip select is active-low, so we'll initialise it to a driven-high state
 	gpio_set_dir(PIN_CS, GPIO_OUT);
 	gpio_put(PIN_CS, 1);
- #endif /* SPI */
-//	sleep_ms(5000); /* Time to start a terminal */
-//	V printf("Length: %u\n%s\n",strlen(ATLAST),ATLAST);
+#endif /* SPI */
+
 #endif /* PICO */
 	V atl_eval(ATLAST);
-    
+
+	while (!tud_cdc_connected()) { sleep_ms(100);  }
+	V printf("tud_cdc_connected()\n");
+
+	V printf("ATLAST 1.2 (2007-10-07) This program is in the public domain.\n");
+
+	while (TRUE) {
+		V printf("\n");		
+		V printf(atl_comment ? "(  " :  /* Show pending comment */
+		(((heap != NULL) && state) ? ":> " : "-> ")); /* Show compiling state */
+		V atl_eval(readLine());
+	}    
 	return 0;
 }

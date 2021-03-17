@@ -1,20 +1,21 @@
 # pico_atlast 
 
-Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine.
+Compiles out of the box, no C-programming knowledge required to use the ATLAST forth console. Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine. 
 
 Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
 
-Atlast Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment. 
+ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment. 
 
-1. Put the forth code in a file, I use "anyname.atl". Make sure to keep source line width max column 132.
+1. Put your forth code in a file,  "anyname.atl". Make sure to keep source line width below max column 132.
 
 2. Run "./atl2h.sh anyname.atl" to create the file forth.h. 
 
 3. Compile atlast.c with make in the build directory, see https://github.com/raspberrypi/pico-sdk 
 
-If forth is the main entry point, the forth code must contain a word "GO" with an infinite loop, e.g. begin ... again to keep the application running. Otherwise, you will have an interactive console where you can use all standard forth words, your own word definitions from forth.h and even define new words. New word definitions will last until power off.
+If forth is the main entry point, the forth code must contain a word "GO" with an infinite loop, e.g. begin ... again to keep the application running. Otherwise, you will get an interactive console where you can use all the standard forth words, your own word definitions from forth.h and even define new words. New word definitions will last until power off.
 
-Use e.g. minicom, picocom to get access to the ATLAST console: picocom /dev/ttyACM0 -b 115200 -l
+Use e.g. minicom, picocom, putty to get access to the ATLAST forth console on the pico from your raspberry pi or other computer: 
+picocom /dev/ttyACM0 -b 115200 -l
 
 Take a look at https://github.com/skvamme/atlast for some example forth code, coded for the pigpio library. API names and functions are very similar to the pico C API.
 
@@ -158,7 +159,7 @@ ADC_CONVERSION_FACTOR
 **************MULTICORE*******************
 	
 MULTICORE_LAUNCH_CORE1
-	( word -- ) word is a compile address, get it with ['] It should never return
+	( word -- ) word is a compile address, get it with [']
 
 MULTICORE_FIFO_POP_BLOCKING
 	( -- result )

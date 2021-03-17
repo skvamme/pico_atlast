@@ -94,13 +94,14 @@
 #include "hardware/spi.h"
 #include "hardware/adc.h"
 #include <tusb.h>
-#define L 132
+#define L 131
 unsigned char str[L+1];
-
 unsigned char *readLine() {
-  unsigned char u, *p;
-  for(p=str, u=getchar(); u!='\r' && p-str<L; u=getchar())  putchar(*p++=u);
-  *p = 0;  return str;
+	unsigned char u, *p;
+	for(p=str, u=getchar(); u!='\r' && p-str<L; u=getchar())  putchar(*p++=u);
+	*p = 0;
+	printf("\n");
+	return str;
 }
 
 #define GPIO
@@ -4485,15 +4486,14 @@ int main()
 #endif /* SPI */
 
 #endif /* PICO */
-	V atl_eval(ATLAST);
 
 	while (!tud_cdc_connected()) { sleep_ms(100);  }
 	V printf("tud_cdc_connected()\n");
-
 	V printf("ATLAST 1.2 (2007-10-07) This program is in the public domain.\n");
+	V atl_eval(ATLAST);
 
 	while (TRUE) {
-		V printf("\n");		
+	//	V printf("\n");		
 		V printf(atl_comment ? "(  " :  /* Show pending comment */
 		(((heap != NULL) && state) ? ":> " : "-> ")); /* Show compiling state */
 		V atl_eval(readLine());

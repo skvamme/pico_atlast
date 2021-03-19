@@ -96,12 +96,21 @@
 #include <tusb.h>
 #define L 131
 unsigned char str[L+1];
+
 unsigned char *readLine() {
-	unsigned char u, *p;
-	for(p=str, u=getchar(); u!='\r' && p-str<L; u=getchar())  putchar(*p++=u);
-	*p = 0;
-	printf("\n");
-	return str;
+    unsigned char u=0, *p=str;
+    while(u!='\r' && (p-str)<L)
+    { 
+	u = getchar_timeout_us(1<<31) ;
+	if(u!= 255) /* PICO_ERROR_TIMEOUT */
+	{
+		putchar(u);
+		*p++=u;
+	}
+    }
+    *p = 0;
+    printf("\n");
+    return str;
 }
 
 #define GPIO

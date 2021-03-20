@@ -42,6 +42,9 @@ TIME_US
 	
 TIME_DIFF
 	( msb1 lsb1 msb2 lsb2 -- msb lsb ) Diff between two 64 bit timestamps.  Returns a 64 bit unsigned int.
+
+ADD_ALARM_IN_US
+	( msb lsb bool "NAME" -- result ) 2x32 bit value is microseconds to alarm. bool is 0 or 1. NAME is the word to execute.
 	
 U64.
 	( msb lsb -- ) Print unsigned 64 bit integer

@@ -99,11 +99,9 @@ unsigned char str[L+1];
 
 unsigned char *readLine() {
     unsigned char u=0, *p=str;
-    while(u!='\r' && (p-str)<L)
-    { 
+    while(u!='\r' && (p-str)<L) { 
 	u = getchar_timeout_us(1<<31) ;
-	if(u!= 255) /* PICO_ERROR_TIMEOUT */
-	{
+	if(u!= 255) { /* PICO_ERROR_TIMEOUT */
 		putchar(u);
 		*p++=u;
 	}
@@ -2798,6 +2796,21 @@ prim P_fwdresolve()		      /* Emit forward jump offset */
 
 #ifdef PICO
 
+prim P_hour_us() // hours minutes -- msb lsb /* 64 bit delay to use as input to sleep_us */
+{
+	Sl(2);
+	uint64_t result;
+	uint32_t msb;
+	uint32_t lsb;
+	
+	result = ((S0 * 60) + (S1 * 3600)) * 1000000;
+	msb = (uint32_t) (result >>32);
+	lsb = (uint32_t) result;
+	
+	S0 = (stackitem) lsb;	
+	S1 = (stackitem) msb;
+}
+
 prim P_sleep_us() // msb lsb ---  /* 64 bit microsec */
 { 
 	Sl(2);
@@ -2860,6 +2873,30 @@ prim P_time_diff() // msb1 lsb1 msb2 lsb2 -- msb lsb /* Diff between 64 bit time
 	S1 = (stackitem) (result >>32);
 	S0 = (stackitem) result;
 }
+
+void alarmcallback(id, name)
+	int id;
+	void * name;
+{
+	dictword *dw;	
+	dw = atl_lookup(name);
+        atl_exec(dw);
+}
+
+prim P_add_alarm_in_us() // ( msb lsb fire_if_past name -- result )  /* result is timer no. Word NAME is executed at alarm */
+{
+	Sl(4);
+	int result;
+	uint64_t t;
+	
+	t = ((uint64_t) S3) << 32 | (uint32_t) S2;
+// V printf(base == 16 ? "%llX" : "%llu ", t);
+	result = add_alarm_in_us(t, (alarm_callback_t)  alarmcallback,(char *) S0,S1);
+	Pop2;
+	Pop;
+	S0 = result;
+}
+
 
 
 /* GPIO ****************************************** */
@@ -3566,9 +3603,11 @@ static struct primfcn primt[] = {
         {"0SLEEP_MS", P_sleep_ms},
 	{"0SLEEP_US", P_sleep_us},
 	{"0TIME_US", P_time_us},
+	{"0HOUR_US", P_hour_us},
 	{"0U64.", P_uint64_dot},
 	{"0U.", P_uint32_dot},
 	{"0TIME_DIFF", P_time_diff},
+	{"0ADD_ALARM_IN_US", P_add_alarm_in_us},
 	{"0GPIO_INIT", P_gpio_init},
 	{"0GPIO_SET_DIR", P_gpio_set_dir},
 	{"0GPIO_PUT", P_gpio_put},

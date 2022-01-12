@@ -114,7 +114,7 @@ unsigned char *readLine() {
 #define GPIO
 //#define SPI
 #define ADC
-#define MULTICORE
+//#define MULTICORE
 #define WATCHDOG
 #define QUEUE
 

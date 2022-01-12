@@ -4,7 +4,9 @@ Compiles out of the box, no C-programming knowledge required to use the ATLAST f
 
 Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
 
-ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment. 
+ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment.  Pico is dual core, the multicore functionality is a copy of pico_examples_multicore_runner_queue. https://github.com/raspberrypi/pico-examples/tree/master/multicore/multicore_runner_queue
+
+Use all ATLAST forth on core0. Use only those forth words that are coded  in C or assembly language (and not using the stack) on core1.
 
 1. Put your forth code in a file,  "anyname.atl". Make sure to keep source line width below max column 132.
 
@@ -43,6 +45,9 @@ TIME_US
 TIME_DIFF
 	( msb1 lsb1 msb2 lsb2 -- msb lsb ) Diff between two 64 bit timestamps.  Returns a 64 bit unsigned int.
 
+HOUR_US
+	( hours minutes -- msb lsb ) Convert hours and minutes to 2x32 bit microseconds.
+	
 ADD_ALARM_IN_US
 	( msb lsb bool "NAME" -- result ) 2x32 bit value is microseconds to alarm. bool is 0 or 1. NAME is the word to execute.
 	

@@ -66,7 +66,7 @@
 #define SHORTCUTA		      /* Shortcut integer arithmetic words */
 #define SHORTCUTC		      /* Shortcut integer comparison */
 #define STRING                      /* String functions */
-//#define SYSTEM                     /* System command function */
+#define SYSTEM                     /* System command function */
 #ifndef NOMEMCHECK
 #define MEMSTAT
 #define ALIGNMENT
@@ -1533,6 +1533,13 @@ prim P_dot()			      /* Print top of stack, pop it */
     Pop;
 }
 
+prim P_emit()                         /* Print integer on top of stack as character */
+{
+    Sl(1);
+    V printf("%c", (int)S0);
+    Pop;
+}
+
 prim P_question()		      /* Print value at address */
 {
     Sl(1);
@@ -2662,6 +2669,11 @@ prim P_system()
     S0 = system((char *) S0);
 }
 
+prim P_kill()
+{
+    exit(0);
+}
+ 
 prim P_juliantime() /* seconds since 1970-01-01 */
 {
     Push = (stackitem) time(NULL);
@@ -3179,16 +3191,26 @@ prim P_adc_temp() //  -- temp ( temp is a float on the stack )
 	SREAL0(r);
 }
 
+int32_t adc_temp_core1()
+{
+	float r;
+	const float conversion_factor = 3.3f / (1 << 12);
+
+	uint16_t result = adc_read();
+	r = 27 - (result * conversion_factor - 0.706) / 0.001721;
+	
+	
+}
+
 #endif /* ADC */
 
 #ifdef MULTICORE
 /* MULTICORE ******************************************* */
 
-prim P_multicore_launch_core1() // word --  ( word should not return )
+prim P_multicore_launch_core1() //  --  
 {
-	Sl(1);
-	multicore_launch_core1( (void (*)(void)) S0); 
-	Pop;
+    multicore_launch_core1(core1_entry);
+// V printf("After launch_core1\n");
 }
 
 prim P_multicore_fifo_pop_blocking() // -- result
@@ -3513,6 +3535,7 @@ static struct primfcn primt[] = {
 
 #ifdef SYSTEM
     {"0SYSTEM", P_system},
+    {"0KILL", P_kill},
     {"0TIME", P_juliantime},
 #endif
 #ifdef TRACE
@@ -3570,6 +3593,7 @@ static struct primfcn primt[] = {
 
 #ifdef CONIO
     {"0.", P_dot},
+    {"0EMIT", P_emit},
     {"0?", P_question},
     {"0CR", P_cr},
     {"0.S", P_dots},

@@ -4,7 +4,7 @@ Compiles out of the box, no C-programming knowledge required to use the ATLAST f
 
 Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
 
-ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment.  Pico is dual core, the multicore functionality is a copy of pico_examples_multicore_runner_queue. https://github.com/raspberrypi/pico-examples/tree/master/multicore/multicore_runner_queue
+ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment.
 
 Use all ATLAST forth on core0. Use only those forth words that are coded  in C or assembly language (and not using the stack) on core1.
 

@@ -21,6 +21,11 @@ picocom /dev/ttyACM0 -b 115200 -l
 
 Take a look at https://github.com/skvamme/atlast for some example forth code, coded for the pigpio library. API names and functions are very similar to the pico C API.
 
+If you want to try sixel graphics, upgrade your Xterm to the latest version (where sixel graphics is enabled by default). Add a file .Xresources to your home directory with the following line: xterm*decTerminalID: vt340
+
+In xterm connect to the pico with oc -l /dev/ttyACM0 -s 115200
+Type run
+
 Read the PICO documentation for the C/C++ API for a detailed description of each function.
 
 Defined words:

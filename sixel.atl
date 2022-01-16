@@ -1,0 +1,28 @@
+( Draw sixel graphics in a terminal emulator, Xterm)
+
+: color "#0;2;100;100;100#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100" type ;
+: start 27 emit "Pq" type ;
+: end 27 emit 92 emit ;
+: cr_ "$" type ;
+: crlf  "-" type ;
+
+500 1 1 ARRAY data
+
+: filldata  450 1 do  i float  3.14 f* 180.0 f/ sin 50.0 f* fix 130 + 2 / i data c! loop ;
+
+: plot  6 * 200 swap - 2 / 0 data c! "#1!12?" type
+    450 1 do 0 data c@ i data c@ dup . < 0 data c@ i data c@ 6 +  >
+    = if "@" type else "?" type then loop cr_ ;
+
+: y_arrow "#0!22?~" type crlf "!21?~~~" type crlf "!20?!5~" type crlf 
+  "#0!22?~" type crlf "#0!22?~" type crlf ;
+  
+: yaxis "#0!12?!10@~" type crlf ;
+  
+: hor_line "#0!12?!10@" type 70 1 do "~@@@@@@" type loop crlf ;
+
+: hor_ticks  "#0!22?" type 70 1 do "N??????" type loop crlf ;
+
+
+: run filldata start color y_arrow 20 1 do i plot yaxis loop hor_line hor_ticks cr end ;
+

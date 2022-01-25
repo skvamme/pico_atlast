@@ -27,7 +27,7 @@ If you want to try sixel graphics, upgrade your Xterm to the latest version (whe
 
 sudo apt install xterm
 
-Add a file .Xresources to your home directory with the following line: 
+Add a file .Xresources to your home directory with the following line 
 
 xterm*decTerminalID: vt340
 

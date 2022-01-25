@@ -23,7 +23,7 @@ Take a look at https://github.com/skvamme/atlast for some example forth code, co
 
 *****************************************************************************************
 
-If you want to try sixel graphics, upgrade your Xterm to the latest version (where sixel graphics is enabled by default). 
+If you want to try sixel graphics, upgrade your Xterm to the latest version. 
 
 sudo apt install xterm
 sudo apt install cu

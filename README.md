@@ -87,6 +87,12 @@ U64.
 U.
 	( integer -- ) Print unsigned 32 bit integer.
 	
+EMIT
+	( integer -- ) Print ASCII integer as a char
+	
+KILL
+	( -- ) Exit ATLAST Same as Ctrl-D
+	
 GPIO_INIT
 	( gpiopin --  )
 

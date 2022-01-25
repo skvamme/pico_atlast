@@ -26,6 +26,9 @@ Take a look at https://github.com/skvamme/atlast for some example forth code, co
 If you want to try sixel graphics, upgrade your Xterm to the latest version. 
 
 sudo apt install xterm
+
+And install cu
+
 sudo apt install cu
 
 Add a file .Xresources to your home directory with the following line 

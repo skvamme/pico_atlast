@@ -23,9 +23,20 @@ Take a look at https://github.com/skvamme/atlast for some example forth code, co
 
 *****************************************************************************************
 
-If you want to try sixel graphics, upgrade your Xterm to the latest version (where sixel graphics is enabled by default). Add a file .Xresources to your home directory with the following line: xterm*decTerminalID: vt340
+If you want to try sixel graphics, upgrade your Xterm to the latest version (where sixel graphics is enabled by default). 
+
+sudo apt install xterm
+
+Add a file .Xresources to your home directory with the following line: 
+
+xterm*decTerminalID: vt340
+
+Convert sixel.atl to atlast.h
 
 ./atl2h.sh sixel.atl
+
+And finally, build it
+
 make
 
 In xterm connect to the pico with 

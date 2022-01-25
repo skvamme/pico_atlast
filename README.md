@@ -43,7 +43,9 @@ And finally, build it
 
 make
 
-In xterm connect to the pico with 
+Drag and drop atlast.uf2 to your pico
+
+Start xterm on your dev computer and connect to the pico with 
 
 cu -l /dev/ttyACM0 -s 115200
 

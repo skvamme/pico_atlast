@@ -41,7 +41,7 @@ make
 
 In xterm connect to the pico with 
 
-oc -l /dev/ttyACM0 -s 115200
+cu -l /dev/ttyACM0 -s 115200
 
 Type run
 

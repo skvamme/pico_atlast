@@ -1,6 +1,6 @@
 ( Draw sixel graphics in a terminal emulator, Xterm)
 
-: color "#0;2;100;100;100#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100" type ;
+: color "#0;2;50;50;50#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100" type ;
 : start 27 emit "Pq" type ;
 : end 27 emit 92 emit ;
 : cr_ "$" type ;
@@ -24,5 +24,5 @@
 : hor_ticks  "#0!22?" type 70 1 do "N??????" type loop crlf ;
 
 
-: run filldata start color y_arrow 20 1 do i plot yaxis loop hor_line hor_ticks cr end ;
+: run filldata start color y_arrow 20 1 do i plot yaxis loop hor_line hor_ticks end cr ;
 

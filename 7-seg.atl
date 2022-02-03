@@ -1,0 +1,47 @@
+\ Draw 7-seg sixel graphics in a terminal emulator, Xterm
+\ Turn OFF sixel scrolling, middle mouse button menu in Xterm
+
+15 string pos
+
+: color "#0;2;100;100;100#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100" type ; ( Adjust #0 to match your background color )
+: end 27 emit 92 emit ;
+: cr_ "$" type ;
+: crlf  "-" type ;
+: left "!9?" pos strcpy ;
+: right "!49?" pos strcpy ;
+: red "#1" type ;
+: bg "#0" type ; 
+: pad 10 1 do crlf loop ; ( top margin )
+: hi ;
+: mid 8 1 do crlf loop ;
+: lo 15 1 do crlf loop ;
+: start 27 emit "Pq" type color pad red ;
+
+: horizontal "!17?_ow{}!26~}{wo_" type crlf "!17?@BFN^!26~^NFB@" type crlf ;
+: vertical crlf pos type "!2?_ow{{wo_" type crlf pos type 6 1 do "!12~" 
+	type crlf pos type loop "!2?@BFNNFB@" type crlf ;
+
+: wipe start bg 17 1 do "!61~" type crlf loop end ; 
+
+: one start hi right vertical end start mid right vertical end ;
+
+: two start hi horizontal end start hi right vertical end start mid horizontal end 
+	start mid left vertical end start lo horizontal end ;
+
+: three one start hi horizontal end start mid horizontal end start lo horizontal end ;
+
+: four one start hi left vertical end start mid horizontal end ;
+
+: five start hi horizontal end start hi left vertical end start mid horizontal end 
+	start mid right vertical end start lo horizontal end ;
+
+: six five start mid left vertical end ;
+
+: seven one start hi horizontal end ;
+
+: nine four start hi horizontal end ;
+
+: zero one start hi horizontal end start hi left vertical end 
+	start mid left vertical end start lo horizontal end ;
+
+: eight zero start mid horizontal end ;

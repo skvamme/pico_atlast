@@ -2336,6 +2336,13 @@ prim P_quit()			      /* Terminate execution */
     ip = NULL;			      /* Stop execution of current word */
 }
 
+prim P_longsleep() // sec ---
+{ 
+  Sl(1);
+  sleep_ms(S0 * 1000);
+  Pop;
+}
+
 prim P_abort()			      /* Abort, clearing data stack */
 {
     P_clear();			      /* Clear the data stack */
@@ -2677,6 +2684,17 @@ prim P_kill()
 prim P_juliantime() /* seconds since 1970-01-01 */
 {
     Push = (stackitem) time(NULL);
+}
+
+prim P_klick() /* Mouseklicks from a terminal emulator, eg Xterm */
+{
+	Sl(3);
+    V printf("%ld ", S0); 
+    V printf(" %ld ", S1); 
+    V printf(" %ld \n", S2); 
+    Pop;
+    Pop;
+    Pop;
 }
 
 #endif /* SYSTEM */
@@ -3532,11 +3550,13 @@ static struct primfcn primt[] = {
     {"0QUIT", P_quit},
     {"0ABORT", P_abort},
     {"1ABORT\"", P_abortq},
+    {"0LONGSLEEP", P_longsleep},
 
 #ifdef SYSTEM
     {"0SYSTEM", P_system},
     {"0KILL", P_kill},
     {"0TIME", P_juliantime},
+    {"0KLICK", P_klick},
 #endif
 #ifdef TRACE
     {"0TRACE", P_trace},
@@ -4521,8 +4541,14 @@ static void ctrlc(sig)
 
 int main()
 {
-    FILE *ifp;
-    int fname = FALSE, defmode = FALSE;
+	FILE *ifp;
+	int fname = FALSE, defmode = FALSE;
+	int c = 0;
+	char mouse[4];
+	char mousedata[16];
+	char *t;
+	char pre[132];
+
 	
 //    Evaluation (data) stack length. Expressed as a number of 4 byte stack items. Default 100. 
 	atl_stklen = 100;
@@ -4565,10 +4591,35 @@ int main()
 	V atl_eval(ATLAST);
 
 	while (TRUE) {
-	//	V printf("\n");		
-		V printf(atl_comment ? "(  " :  /* Show pending comment */
-		(((heap != NULL) && state) ? ":> " : "-> ")); /* Show compiling state */
-		V atl_eval(readLine());
-	}    
+		pre[0] = getchar();
+		pre[1] = '\0';
+//		V printf("c is: %d\n",c);
+		if (pre[0]  == 13) {
+			V printf("\n");
+			continue;
+		}
+		if (pre[0]  == 27) { 
+			fgets(mouse, 4, stdin);
+			if (mouse[2] == 77) {
+				fgets(mouse, 4, stdin);
+				V sprintf(mousedata,"%d %d %d klick\n",mouse[0]-32,mouse[1]-32,mouse[2]);
+				V atl_eval(mousedata);
+			}
+			if (mouse[1] == 77) {
+				fgets(mouse, 3, stdin);
+				V sprintf(mousedata,"%d %d %d klick\n",mouse[0]-32,mouse[1]-32,mouse[2]);
+				V atl_eval(mousedata);
+			}
+			continue;
+		} else {
+			V printf("%s",pre);
+			t = readLine();
+			strcat(pre,t);
+//	      	ungetc(c, stdin);
+//		V printf("%c",c);		
+//		V printf(atl_comment ? "(  " :  /* Show pending comment */
+//		(((heap != NULL) && state) ? ":> " : "-> ")); /* Show compiling state */
+		V atl_eval(pre);
+      }}    
 	return 0;
 }

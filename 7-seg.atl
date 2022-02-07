@@ -1,27 +1,36 @@
-\ Draw 7-seg sixel graphics in a terminal emulator, Xterm
-\ Turn OFF sixel scrolling, middle mouse button menu in Xterm
+( Draw 7-seg sixel graphics in a terminal emulator, Xterm )
+( Type RESET and then turn OFF sixel scrolling in middle mouse button menu in Xterm )
+( CTRL+middle_mouse_button )
+( Type RUN )
 
 15 string pos
+4 string currentcolor
 
-: color "#0;2;100;100;100#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100" type ; ( Adjust #0 to match your background color )
+: black "#0" currentcolor strcpy ;
+: red "#1" currentcolor strcpy ;
+: green "#2" currentcolor strcpy ;
+: blue "#3" currentcolor strcpy ;
+: white "#4" currentcolor strcpy ;
+: reset 27 emit "c" type ;
+: mouse 27 emit 91 emit "?1000h" type ; ( DECSET CSI ? Pm h )
+: color "#0;2;0;0;0#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100#4;2;100;100;100" 
+   type currentcolor type ;
 : end 27 emit 92 emit ;
 : cr_ "$" type ;
 : crlf  "-" type ;
 : left "!9?" pos strcpy ;
 : right "!49?" pos strcpy ;
-: red "#1" type ;
-: bg "#0" type ; 
 : pad 10 1 do crlf loop ; ( top margin )
 : hi ;
 : mid 8 1 do crlf loop ;
 : lo 15 1 do crlf loop ;
-: start 27 emit "Pq" type color pad red ;
+: start 27 emit "Pq" type color pad ;
 
 : horizontal "!17?_ow{}!26~}{wo_" type crlf "!17?@BFN^!26~^NFB@" type crlf ;
 : vertical crlf pos type "!2?_ow{{wo_" type crlf pos type 6 1 do "!12~" 
 	type crlf pos type loop "!2?@BFNNFB@" type crlf ;
 
-: wipe start bg 17 1 do "!61~" type crlf loop end ; 
+: wipe start 17 1 do "!61~" type crlf loop end ; 
 
 : one start hi right vertical end start mid right vertical end ;
 
@@ -45,3 +54,7 @@
 	start mid left vertical end start lo horizontal end ;
 
 : eight zero start mid horizontal end ;
+
+: run red eight cr 1 longsleep black eight cr blue seven cr 1 longsleep black seven cr 
+ green five cr 1 longsleep black five cr red four cr 1 longsleep black four cr 
+ blue three cr ;

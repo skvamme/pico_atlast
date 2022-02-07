@@ -55,6 +55,6 @@
 
 : eight zero start mid horizontal end ;
 
-: run red eight cr 1 longsleep black eight cr blue seven cr 1 longsleep black seven cr 
- green five cr 1 longsleep black five cr red four cr 1 longsleep black four cr 
- blue three cr ;
+: run red eight 1 longsleep black eight blue seven 1 longsleep black seven  
+ green five  1 longsleep black five  red four  1 longsleep black four  
+ blue three  ;

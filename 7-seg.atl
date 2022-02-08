@@ -2,6 +2,7 @@
 ( Type RESET and then turn OFF sixel scrolling in middle mouse button menu in Xterm )
 ( CTRL+middle_mouse_button )
 ( Type RUN )
+( Type MOUSE to activate the mouse function )
 
 15 string pos
 4 string currentcolor
@@ -13,7 +14,7 @@
 : white "#4" currentcolor strcpy ;
 : reset 27 emit "c" type ;
 : mouse 27 emit 91 emit "?1000h" type ; ( DECSET CSI ? Pm h )
-: klick 2 pick 3 = if  drop drop drop  ." " Row " . ." " Col ". ." " Button " . then ;  
+: klick 2 pick 3 = if  drop drop drop  ." " Row " . ." " Col ". ." " Button " . cr then ;  
 : color "#0;2;0;0;0#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100#4;2;100;100;100" 
    type currentcolor type ;
 : end 27 emit 92 emit ;
@@ -56,6 +57,14 @@
 
 : eight zero start mid horizontal end ;
 
-: run red eight 1 longsleep black eight blue seven 1 longsleep black seven  
- green five  1 longsleep black five  red four  1 longsleep black four  
- blue three  ;
+: run red zero 1 longsleep black zero
+blue one 1 longsleep black one
+green two  1 longsleep black two
+red three  1 longsleep black three
+blue four  1 longsleep black four  
+green five  1 longsleep black five
+red six  1 longsleep black six
+blue seven  1 longsleep black seven
+green eight  1 longsleep black eight
+red nine  1 longsleep black nine
+blue zero ;

@@ -13,6 +13,7 @@
 : white "#4" currentcolor strcpy ;
 : reset 27 emit "c" type ;
 : mouse 27 emit 91 emit "?1000h" type ; ( DECSET CSI ? Pm h )
+: klick 2 pick 3 = if  drop drop drop  ." " Row " . ." " Col ". ." " Button " . then ;  
 : color "#0;2;0;0;0#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100#4;2;100;100;100" 
    type currentcolor type ;
 : end 27 emit 92 emit ;

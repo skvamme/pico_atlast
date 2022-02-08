@@ -4541,9 +4541,6 @@ static void ctrlc(sig)
 
 int main()
 {
-	FILE *ifp;
-	int fname = FALSE, defmode = FALSE;
-	int c = 0;
 	char mouse[4];
 	char mousedata[16];
 	char *t;
@@ -4593,21 +4590,15 @@ int main()
 	while (TRUE) {
 		pre[0] = getchar();
 		pre[1] = '\0';
-//		V printf("c is: %d\n",c);
 		if (pre[0]  == 13) {
 			V printf("\n");
 			continue;
 		}
 		if (pre[0]  == 27) { 
-			fgets(mouse, 4, stdin);
-			if (mouse[2] == 77) {
-				fgets(mouse, 4, stdin);
-				V sprintf(mousedata,"%d %d %d klick\n",mouse[0]-32,mouse[1]-32,mouse[2]);
-				V atl_eval(mousedata);
-			}
+			fgets(mouse, 3, stdin);
 			if (mouse[1] == 77) {
-				fgets(mouse, 3, stdin);
-				V sprintf(mousedata,"%d %d %d klick\n",mouse[0]-32,mouse[1]-32,mouse[2]);
+				fgets(mouse, 4, stdin);
+				V sprintf(mousedata,"%d %d %d klick\n",mouse[0]-32,mouse[1]-32,mouse[2]-32);
 				V atl_eval(mousedata);
 			}
 			continue;
@@ -4615,11 +4606,10 @@ int main()
 			V printf("%s",pre);
 			t = readLine();
 			strcat(pre,t);
-//	      	ungetc(c, stdin);
-//		V printf("%c",c);		
 //		V printf(atl_comment ? "(  " :  /* Show pending comment */
 //		(((heap != NULL) && state) ? ":> " : "-> ")); /* Show compiling state */
-		V atl_eval(pre);
-      }}    
+			V atl_eval(pre);
+		}
+	}    
 	return 0;
 }

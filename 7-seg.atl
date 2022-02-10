@@ -15,6 +15,8 @@
 : reset 27 emit "c" type ;
 : mouse 27 emit 91 emit "?1000h" type ; ( DECSET CSI ? Pm h )
 : klick 2 pick 3 = if  drop drop drop  ." " Row " . ." " Col ". ." " Button " . cr then ;  
+: noscroll 27 emit 91 emit "?80l" type ; ( disable sixel scrolling, will change to ?80h in xterm 369 )
+: scroll 27 emit 91 emit "?80h" type ;   ( ?80l in xterm <= 369 )
 : color "#0;2;0;0;0#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100#4;2;100;100;100" 
    type currentcolor type ;
 : end 27 emit 92 emit ;
@@ -57,7 +59,7 @@
 
 : eight zero start mid horizontal end ;
 
-: run red zero 1 longsleep black zero
+: run noscroll red zero 1 longsleep black zero
 blue one 1 longsleep black one
 green two  1 longsleep black two
 red three  1 longsleep black three

@@ -1551,7 +1551,6 @@ prim P_question()		      /* Print value at address */
 prim P_cr()			      /* Carriage return */
 {
     V printf("\n");
-    fflush(stdout);
 }
 
 prim P_dots()			      /* Print entire contents of stack */
@@ -2675,11 +2674,6 @@ prim P_system()
     Hpc(S0);
     S0 = system((char *) S0);
 }
-
-prim P_kill()
-{
-    exit(0);
-}
  
 prim P_juliantime() /* seconds since 1970-01-01 */
 {
@@ -2688,7 +2682,7 @@ prim P_juliantime() /* seconds since 1970-01-01 */
 
 prim P_klick() /* Mouseklicks from a terminal emulator, eg Xterm */
 {
-	Sl(3);
+    Sl(3);
     V printf("%ld ", S0); 
     V printf(" %ld ", S1); 
     V printf(" %ld \n", S2); 
@@ -3554,7 +3548,6 @@ static struct primfcn primt[] = {
 
 #ifdef SYSTEM
     {"0SYSTEM", P_system},
-    {"0KILL", P_kill},
     {"0TIME", P_juliantime},
     {"0KLICK", P_klick},
 #endif

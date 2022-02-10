@@ -51,8 +51,6 @@ cu -l /dev/ttyACM0 -s 115200
 
 Type run
 
-To exit ATLAST, type KILL
-
 To exit cu, type ~ (wait for a prompt) and type  .
 
 

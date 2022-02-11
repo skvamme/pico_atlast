@@ -1,0 +1,92 @@
+8 string num
+4 string sx1
+4 string sx2
+4 string sx3
+4 string sx4
+15 string posv
+15 string posh
+4 string currentcolor
+4 string tmpstr
+variable place
+variable val
+variable newval
+
+: black "#0" currentcolor strcpy ;
+: red "#1" currentcolor strcpy ;
+: green "#2" currentcolor strcpy ;
+: blue "#3" currentcolor strcpy ;
+: white "#4" currentcolor strcpy ;
+: reset 27 emit "c" type ;
+: mouse 27 emit 91 emit "?1000h" type ; ( DECSET CSI ? Pm h )
+: klick 2 pick 3 = if  drop drop drop  ." " Row " . ." " Col ". ." " Button " . cr then ;  
+: noscroll 27 emit 91 emit "?80l" type ; ( disable sixel scrolling, will change to ?80h in xterm 369 )
+: scroll 27 emit 91 emit "?80h" type ;   ( ?80l in xterm <= 369 )
+: color "#0;2;0;0;0#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100#4;2;100;100;100" 
+   type currentcolor type ;
+: end 27 emit 92 emit ;
+: cr_ "$" type ;
+: crlf  "-" type ;
+( : left "!9?" pos strcpy ; )
+: left "!" posv strcpy place @ 9 + "%d" tmpstr strform tmpstr posv strcat "?" posv strcat ;
+( : right "!49?" pos strcpy ; )
+: right  "!" posv strcpy place @ 49 + "%d" tmpstr strform tmpstr posv strcat "?" posv strcat ;
+: hpad "!" posh strcpy place @ 17 + "%d" tmpstr strform tmpstr posh strcat "?" posh strcat ;
+: pad 10 1 do crlf loop ; ( top margin )
+: hi ;
+: mid 8 1 do crlf loop ;
+: lo 15 1 do crlf loop ;
+: start 27 emit "Pq" type color pad ;
+
+: horizontal posh type "_ow{}!26~}{wo_" type crlf posh type "@BFN^!26~^NFB@" type crlf ;
+: vertical crlf posv type "!2?_ow{{wo_" type crlf posv type 6 1 do "!12~" 
+	type crlf posv type loop "!2?@BFNNFB@" type crlf ;
+
+: wipe start 17 1 do "!61~" type crlf loop end ; 
+
+: six ;
+
+: six- start mid hpad horizontal end ;
+
+: six1 start hi right vertical end start mid right vertical end ;
+
+: six2 start hi hpad horizontal end start hi right vertical end start mid hpad horizontal end 
+	start mid left vertical end start lo hpad horizontal end ;
+
+: six3 six1 start hi hpad horizontal end start mid hpad horizontal end start lo hpad horizontal end ;
+
+: six4 six1 start hi left vertical end start mid hpad horizontal end ;
+
+: six5 start hi hpad horizontal end start hi left vertical end start mid hpad horizontal end 
+	start mid right vertical end start lo hpad horizontal end ;
+
+: six6 six5 start mid left vertical end ;
+
+: six7 six1 start hi hpad horizontal end ;
+
+: six9 six4 start hi hpad horizontal end ;
+
+: six0 six1 start hi hpad horizontal end start hi left vertical end 
+	start mid left vertical end start lo hpad horizontal end ;
+
+: six8 six0 start mid hpad horizontal end ;
+
+
+: tokenize "%d" num strform
+"six" sx1 strcpy num     0 1 sx1 3 + substr 
+"six" sx2 strcpy num 1 + 0 1 sx2 3 + substr 
+"six" sx3 strcpy num 2 + 0 1 sx3 3 + substr 
+"six" sx4 strcpy num 3 + 0 1 sx4 3 + substr ;
+
+: test sx1 type cr sx2 type cr sx3 type cr sx4 type cr ;
+
+
+: setup 25 gpio_init 25 1 gpio_set_dir adc_init 26 adc_gpio_init 
+  1 adc_set_temp_sensor_enabled 4 adc_select_input 1234 tokenize 123 tokenize ;
+  
+: display 0 place ! sx1 evaluate drop 60 place ! sx2 evaluate drop 120 place ! sx3 evaluate drop
+   180 place ! sx4 evaluate drop ;
+   
+: go noscroll setup red  begin adc_temp fix dup newval ! val @ <> if 
+  888 tokenize black display newval @ tokenize red display then
+  newval @ val ! 1000 sleep_ms again ; 
+

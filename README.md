@@ -19,6 +19,8 @@ If forth is the main entry point, the forth code must contain a word "GO" with a
 Use e.g. minicom, picocom, putty to get access to the ATLAST forth console on the pico from your raspberry pi or other computer: 
 picocom /dev/ttyACM0 -b 115200 -l
 
+The following terminal emulators can do sixel graphics: XTerm (360 or later), MLterm (3.8.4), Contour (0.1.1), WezTerm (20210502), Mintty (3.5.0), RLogin (2.25.3), and Reflection Desktop (16.2.0).
+
 Take a look at https://github.com/skvamme/atlast for some example forth code, coded for the pigpio library. API names and functions are very similar to the pico C API.
 
 *****************************************************************************************

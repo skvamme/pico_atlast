@@ -1,30 +1,32 @@
 ( Draw sixel graphics in a terminal emulator, Xterm)
 
-: color "#0;2;100;100;100#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100" type ;
+8 string num
+: color "#0;2;50;50;50#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100" type ;
 : start 27 emit "Pq" type ;
 : end 27 emit 92 emit ;
 : cr_ "$" type ;
 : crlf  "-" type ;
-: noscroll 27 emit 91 emit "?80l" type ; ( disable sixel scrolling, will change to ?80h in xterm 369 )
-: scroll 27 emit 91 emit "?80h" type ;   ( ?80l in xterm <= 369 )
+: up 27 emit 91 emit "%d" num strform num type "A" type ; ( n -- )
 
 500 1 1 ARRAY data
 
 : filldata  450 1 do  i float  3.14 f* 180.0 f/ sin 50.0 f* fix 130 + 2 / i data c! loop ;
 
-: plot  6 * 200 swap - 2 / 0 data c! "#1!12?" type
+: plot  6 * 200 swap - 2 / 0 data c! "#1!24?" type
     450 1 do 0 data c@ i data c@ dup . < 0 data c@ i data c@ 6 +  >
     = if "@" type else "?" type then loop cr_ ;
 
-: y_arrow "#0!22?~" type crlf "!21?~~~" type crlf "!20?!5~" type crlf 
-  "#0!22?~" type crlf "#0!22?~" type crlf ;
+: y_arrow "#0!33?~~" type crlf "!32?~~~" type crlf "!31?!4~" type crlf "!30?!5~" type crlf 
+  "!34?~" type crlf "!34?~" type crlf ;
   
-: yaxis "#0!12?!10@~" type crlf ;
+: yaxis "#0!24?!10@~" type crlf ;
   
-: hor_line "#0!12?!10@" type 70 1 do "~@@@@@@" type loop crlf ;
+: hor_line "#0!24?!10@" type 65 1 do "~!6@" type loop "!4~!4^!4N!4F!4B!4@" type crlf ;
 
-: hor_ticks  "#0!22?" type 70 1 do "N??????" type loop crlf ;
+: hor_ticks  "#0!34?" type 14 1 do "N!34?" type loop crlf ;
+: hor_num "     0     1     2     3     4    5     6     7     8     9    10    11    12" type ;
+: ver_num 12 up "  5" type cr cr "  4" type cr cr "  3" type cr cr "  2" type cr cr "  1" type cr cr "  0" type cr cr ;
 
 
-: run filldata scroll start color y_arrow 20 1 do i plot yaxis loop hor_line hor_ticks cr end ;
+: run filldata start color y_arrow 20 1 do i plot yaxis loop hor_line hor_ticks end hor_num cr ver_num cr ;
 

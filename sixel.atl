@@ -12,20 +12,17 @@
 
 : filldata  450 1 do  i float  3.14 f* 180.0 f/ sin 50.0 f* fix 130 + 2 / i data c! loop ;
 
-: plot  6 * 200 swap - 2 / 0 data c! "#1!24?" type
-    450 1 do 0 data c@ i data c@ dup . < 0 data c@ i data c@ 6 +  >
+: plot  6 * 200 swap - 2 / 0 data c! "#1!30?" type
+    450 1 do 0 data c@ i data c@ < 0 data c@ i data c@ 6 +  >
     = if "@" type else "?" type then loop cr_ ;
 
 : y_arrow "#0!33?~~" type crlf "!32?~~~" type crlf "!31?!4~" type crlf "!30?!5~" type crlf 
   "!34?~" type crlf "!34?~" type crlf ;
-  
-: yaxis "#0!24?!10@~" type crlf ;
-  
+: yaxis "#0!29?!5@~" type crlf ;
 : hor_line "#0!24?!10@" type 65 1 do "~!6@" type loop "!4~!4^!4N!4F!4B!4@" type crlf ;
-
 : hor_ticks  "#0!34?" type 14 1 do "N!34?" type loop crlf ;
 : hor_num "     0     1     2     3     4    5     6     7     8     9    10    11    12" type ;
-: ver_num 12 up "  5" type cr cr "  4" type cr cr "  3" type cr cr "  2" type cr cr "  1" type cr cr "  0" type cr cr ;
+: ver_num 11 up "400 -" type cr cr "300 -" type cr cr "200 -" type cr cr "100 -" type cr cr "  0" type cr cr cr cr ;
 
 
 : run filldata start color y_arrow 20 1 do i plot yaxis loop hor_line hor_ticks end hor_num cr ver_num cr ;

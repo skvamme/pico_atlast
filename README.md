@@ -49,7 +49,7 @@ Drag and drop atlast.uf2 to your pico
 
 Start xterm 
 
-xterm -fa 'fixed' -fs 9
+xterm -fn 6x12
 
 on your dev computer and connect to the pico with 
 

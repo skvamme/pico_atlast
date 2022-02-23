@@ -3001,11 +3001,10 @@ prim P_gpio_put() // pin state ---
 	Pop2;
 }
 
-prim P_gpio_get() // pin --
+prim P_gpio_get() // pin -- value
 {
 	Sl(1);
-	gpio_get(S0);
-	Pop;
+	S0 = gpio_get(S0);
 }
 
 prim P_gpio_get_all() //  -- value

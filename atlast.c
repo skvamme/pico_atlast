@@ -1559,6 +1559,17 @@ prim P_maxrandom()        /* Random between 0 and max, intmax -- int  */
 /*  Console I/O primitives  */
 
 #ifdef CONIO
+prim P_kbhit()    /* 0 if no key is hit   ( -- n ) */
+{
+	stackitem c;
+
+	So(1);
+	c = getchar_timeout_us(0);
+	if(c==-1)
+		Push = 0;
+	else
+		Push = c;
+}
 
 prim P_dot()			      /* Print top of stack, pop it */
 {
@@ -2714,17 +2725,6 @@ prim P_juliantime() /* seconds since 1970-01-01 */
     Push = (stackitem) time(NULL);
 }
 
-prim P_klick() /* Mouseklicks from a terminal emulator, eg Xterm */
-{
-    Sl(3);
-    V printf("%ld ", S0); 
-    V printf(" %ld ", S1); 
-    V printf(" %ld \n", S2); 
-    Pop;
-    Pop;
-    Pop;
-}
-
 #endif /* SYSTEM */
 
 #ifdef TRACE
@@ -3585,7 +3585,6 @@ static struct primfcn primt[] = {
 #ifdef SYSTEM
     {"0SYSTEM", P_system},
     {"0TIME", P_juliantime},
-    {"0KLICK", P_klick},
 #endif
 #ifdef TRACE
     {"0TRACE", P_trace},
@@ -3641,6 +3640,7 @@ static struct primfcn primt[] = {
 #endif /* COMPILERW */
 
 #ifdef CONIO
+    {"0KBHIT?", P_kbhit},
     {"0.", P_dot},
     {"0EMIT", P_emit},
     {"0?", P_question},
@@ -4570,10 +4570,10 @@ static void ctrlc(sig)
 
 int main()
 {
-	char mouse[4];
-	char mousedata[16];
-	char *t;
-	char pre[132];
+//	char mouse[4];
+//	char mousedata[16];
+//	char *t;
+//	char pre[132];
 
 	
 //    Evaluation (data) stack length. Expressed as a number of 4 byte stack items. Default 100. 
@@ -4610,35 +4610,20 @@ int main()
 #endif /* SPI */
 
 #endif /* PICO */
+	V atl_eval(ATLAST);
 
 	while (!tud_cdc_connected()) { sleep_ms(100);  }
 	V printf("tud_cdc_connected()\n");
 	V printf("ATLAST 1.2 (2007-10-07) This program is in the public domain.\n");
-	V atl_eval(ATLAST);
 
 	while (TRUE) {
-		pre[0] = getchar();
-		pre[1] = '\0';
-		if (pre[0]  == 13) {
-			V printf("\n");
-			continue;
-		}
-		if (pre[0]  == 27) { 
-			fgets(mouse, 3, stdin);
-			if (mouse[1] == 77) {
-				fgets(mouse, 4, stdin);
-				V sprintf(mousedata,"%d %d %d klick\n",mouse[0]-32,mouse[1]-32,mouse[2]-32);
-				V atl_eval(mousedata);
-			}
-			continue;
-		} else {
-			V printf("%s",pre);
-			t = readLine();
-			strcat(pre,t);
+//			t = readLine();
+//			strcat(pre,t);
 //		V printf(atl_comment ? "(  " :  /* Show pending comment */
 //		(((heap != NULL) && state) ? ":> " : "-> ")); /* Show compiling state */
-			V atl_eval(pre);
-		}
+//			V atl_eval(pre);
+			V atl_eval(readLine());
+//		}
 	}    
 	return 0;
 }

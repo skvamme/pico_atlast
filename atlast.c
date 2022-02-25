@@ -52,6 +52,7 @@
 #ifndef INDIVIDUALLY
 #define ARRAY			      /* Array subscripting words */
 //#define BREAK			      /* Asynchronous break facility */
+#define Keyhit		      /* Stop and start wordlisting */
 #define COMPILERW		      /* Compiler-writing words */
 #define CONIO			      /* Interactive console I/O */
 #define DEFFIELDS		      /* Definition field access for words */
@@ -656,7 +657,17 @@ static void enter(tkname)
     dict = createword;		      /* Put word at head of dictionary */
 }
 
+
+
 #ifdef Keyhit
+int kbhit() {
+	int c;
+
+	c = getchar_timeout_us(100000);
+	if(c==-1)
+		c = 0;
+	return c;
+}
 
 /*  KBQUIT  --	If this system allows detecting key presses, handle
 		the pause, resume, and quit protocol for the word
@@ -666,9 +677,9 @@ static Boolean kbquit()
 {
     int key;
 
-    if ((key = Keyhit()) != 0) {
+    if ((key = kbhit()) != 0) {
         V printf("\nPress RETURN to stop, any other key to continue: ");
-	while ((key = Keyhit()) == 0) ;
+	while ((key = kbhit()) == 0) ;
         if (key == '\r' || (key == '\n'))
 	    return True;
     }
@@ -1559,7 +1570,7 @@ prim P_maxrandom()        /* Random between 0 and max, intmax -- int  */
 /*  Console I/O primitives  */
 
 #ifdef CONIO
-prim P_kbhit()    /* 0 if no key is hit   ( -- n ) */
+prim P_kbhit()    /* n is 0 if no key is hit  else ascii ( -- n ) */
 {
 	stackitem c;
 
@@ -1570,6 +1581,30 @@ prim P_kbhit()    /* 0 if no key is hit   ( -- n ) */
 	else
 		Push = c;
 }
+
+prim P_dotr()								/* Right align n1 in n2 chars wide field ( n1 n2 -- ) */
+{
+	Sl(2);
+	char field[132] = {0};
+	char num[132];
+	
+	V sprintf(num, "%lld", S1);
+	
+	if (strlen(num) < S0) {
+		for(int i=0; i < S0 - strlen(num); i++)
+			field[i] = 32;
+	}
+	V printf("%s%s",field,num);
+	Pop2;
+}
+
+prim P_atxy()								/* Print next char at Line Column  n1 n2 -- */
+{
+	Sl(2);
+	V printf("\033[%d;%dH",(int)S1,(int)S0);
+	Pop2;
+}
+
 
 prim P_dot()			      /* Print top of stack, pop it */
 {
@@ -3640,8 +3675,10 @@ static struct primfcn primt[] = {
 #endif /* COMPILERW */
 
 #ifdef CONIO
+    {"0AT", P_atxy},
     {"0KBHIT?", P_kbhit},
     {"0.", P_dot},
+    {"0.R", P_dotr},
     {"0EMIT", P_emit},
     {"0?", P_question},
     {"0CR", P_cr},

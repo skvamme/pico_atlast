@@ -1,4 +1,6 @@
 ( simple LED blink on pico )
+( Hit any key to stop. Type GO to start )
+
 : setup 25 gpio_init 25 1 gpio_set_dir ;
 
 : sleep 500 sleep_ms ;
@@ -7,4 +9,5 @@
 
 : off 25 0 gpio_put ;
 
-: go setup begin on sleep off sleep again ;
+: go setup begin on sleep off sleep kbhit? if exit then again ;
+

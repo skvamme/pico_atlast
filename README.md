@@ -26,6 +26,10 @@ on your dev computer and connect to the pico with
 
 <pre>cu -l /dev/ttyACM0 -s 115200</pre>
 
+Now, you have the forth interpreter and compiler up and running, and I could write a lot about how to
+write forth. Or, you could read the book Starting Forth. I could never compete with Leo Brodie, he is
+an excellent teacher and writer, read it!
+
 To exit cu, type ~ (wait for a prompt) and type  .
 
 There is a nice feature in cu, type ~> and give a file name you want to download to the pico.

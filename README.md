@@ -18,50 +18,13 @@ Add a file .Xresources to your home directory with the following line
 
 xterm*decTerminalID: vt340
 
-1. Put your forth code in a file,  "anyname.atl". Make sure to keep source line width below max column 132.
-
-2. Run "./atl2h.sh anyname.atl" to create the file forth.h. 
-
-3. Compile atlast.c with make in the build directory, see https://github.com/raspberrypi/pico-sdk 
-
-If forth is the main entry point, the forth code must contain a word "GO" with an infinite loop, e.g. begin ... again to keep the application running. Otherwise, you will get an interactive console where you can use all the standard forth words, your own word definitions from forth.h and even define new words. New word definitions will last until power off.
-
-
-Take a look at https://github.com/skvamme/atlast for some example forth code, coded for the pigpio library. API names and functions are very similar to the pico C API.
-
-*****************************************************************************************
-
-If you want to try sixel graphics, upgrade your Xterm to the latest version. 
-
-sudo apt install xterm
-
-And install cu
-
-sudo apt install cu
-
-Add a file .Xresources to your home directory with the following line 
-
-xterm*decTerminalID: vt340
-
-Convert sixel.atl to atlast.h
-
-./atl2h.sh sixel.atl
-
-And finally, build it
-
-make
-
-Drag and drop atlast.uf2 to your pico
-
 Start xterm 
 
-xterm -fn 6x12
+<pre>xterm -fn 6x12</pre>
 
 on your dev computer and connect to the pico with 
 
-cu -l /dev/ttyACM0 -s 115200
-
-Type run
+<pre>cu -l /dev/ttyACM0 -s 115200</pre>
 
 To exit cu, type ~ (wait for a prompt) and type  .
 
@@ -71,6 +34,17 @@ You can try different versions of your atlast forth files before creating the .h
 The following terminal emulators can do sixel graphics: XTerm (360 or later), MLterm (3.8.4), Contour (0.1.1), WezTerm (20210502), Mintty (3.5.0), RLogin (2.25.3), XQuartz and Reflection Desktop (16.2.0).
 *******************************************************************************************
 
+If you want to make your forth code remain after power off, use the shell script atl2h.sh.
+
+1. Put your forth code in a file,  "anyname.atl". Make sure to keep source line width below max column 132.
+
+2. Run "./atl2h.sh anyname.atl" to create the file forth.h. 
+
+3. Compile atlast.c with make in the build directory, see https://github.com/raspberrypi/pico-sdk 
+
+If forth is the main entry point, the forth code must contain a word "GO" with an infinite loop, e.g. begin ... again to keep the application running. Otherwise, you will get an interactive console where you can use all the standard forth words, your own word definitions from forth.h and even define new words. New word definitions will last until power off.
+
+******************************************************************************************
 Read the PICO documentation for the C/C++ API for a detailed description of each function.
 
 Defined words:

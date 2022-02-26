@@ -59,7 +59,8 @@ Type run
 
 To exit cu, type ~ (wait for a prompt) and type  .
 
-
+There is a nice feature in cu, type ~> and give a file name you want to download to the pico.
+You can try different versions of your atlast forth files before creating the .h file with atl2h.sh
 *******************************************************************************************
 
 Read the PICO documentation for the C/C++ API for a detailed description of each function.

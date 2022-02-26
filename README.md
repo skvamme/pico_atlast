@@ -6,7 +6,17 @@ Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/startin
 
 ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment.
 
-Use all ATLAST forth on core0. Use only those forth words that are coded  in C or assembly language (and not using the stack) on core1.
+upgrade your Xterm to the latest version. 
+
+<pre>sudo apt install xterm</pre>
+
+And install cu
+
+<pre>sudo apt install cu</pre>
+
+Add a file .Xresources to your home directory with the following line 
+
+xterm*decTerminalID: vt340
 
 1. Put your forth code in a file,  "anyname.atl". Make sure to keep source line width below max column 132.
 
@@ -16,10 +26,6 @@ Use all ATLAST forth on core0. Use only those forth words that are coded  in C o
 
 If forth is the main entry point, the forth code must contain a word "GO" with an infinite loop, e.g. begin ... again to keep the application running. Otherwise, you will get an interactive console where you can use all the standard forth words, your own word definitions from forth.h and even define new words. New word definitions will last until power off.
 
-Use e.g. minicom, picocom, putty to get access to the ATLAST forth console on the pico from your raspberry pi or other computer: 
-picocom /dev/ttyACM0 -b 115200 -l
-
-The following terminal emulators can do sixel graphics: XTerm (360 or later), MLterm (3.8.4), Contour (0.1.1), WezTerm (20210502), Mintty (3.5.0), RLogin (2.25.3), XQuartz and Reflection Desktop (16.2.0).
 
 Take a look at https://github.com/skvamme/atlast for some example forth code, coded for the pigpio library. API names and functions are very similar to the pico C API.
 
@@ -61,6 +67,8 @@ To exit cu, type ~ (wait for a prompt) and type  .
 
 There is a nice feature in cu, type ~> and give a file name you want to download to the pico.
 You can try different versions of your atlast forth files before creating the .h file with atl2h.sh
+
+The following terminal emulators can do sixel graphics: XTerm (360 or later), MLterm (3.8.4), Contour (0.1.1), WezTerm (20210502), Mintty (3.5.0), RLogin (2.25.3), XQuartz and Reflection Desktop (16.2.0).
 *******************************************************************************************
 
 Read the PICO documentation for the C/C++ API for a detailed description of each function.

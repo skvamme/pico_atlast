@@ -18,7 +18,7 @@ Add a file .Xresources to your home directory with the following line
 
 xterm*decTerminalID: vt340
 
-Start xterm on your dev computer
+Start xterm
 
 <pre>xterm -fn 6x12</pre>
 

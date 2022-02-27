@@ -26,13 +26,11 @@ Start xterm on your dev computer
 
 <pre>cu -l /dev/ttyACM0 -s 115200</pre>
 
-Now, you have the forth interpreter and compiler up and running, and I could write a lot about how to
-write forth. Or, you could read the book Starting Forth. I could never compete with Leo Brodie, he is
-an excellent teacher and writer, read it!
+Now, you have the forth interpreter and compiler up and running.
 
 To exit cu, type ~ (wait for a prompt) and type  .
 
-There is a nice feature in cu, type ~> and give a file name you want to download to the pico.
+There is a nice feature in cu, type ~ (wait for the prompt) and type > and give a file name you want to download to the pico.
 You can try different versions of your atlast forth files before creating the .h file with atl2h.sh
 
 The following terminal emulators can do sixel graphics: XTerm (360 or later), MLterm (3.8.4), Contour (0.1.1), WezTerm (20210502), Mintty (3.5.0), RLogin (2.25.3), XQuartz and Reflection Desktop (16.2.0).

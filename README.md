@@ -6,7 +6,7 @@ Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/startin
 
 ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment.
 
-upgrade your Xterm to the latest version. 
+Upgrade your Xterm to the latest version. 
 
 <pre>sudo apt install xterm</pre>
 
@@ -18,11 +18,11 @@ Add a file .Xresources to your home directory with the following line
 
 xterm*decTerminalID: vt340
 
-Start xterm 
+Start xterm on your dev computer
 
 <pre>xterm -fn 6x12</pre>
 
-on your dev computer and connect to the pico with 
+ Connect to the pico with 
 
 <pre>cu -l /dev/ttyACM0 -s 115200</pre>
 

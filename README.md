@@ -24,7 +24,7 @@ Start xterm on your dev computer
 
  Connect to the pico with 
 
-<pre>cu -l /dev/ttyACM0 -s 115200</pre>
+<pre>cu --nostop -l /dev/ttyACM0 -s 115200</pre>
 
 Now, you have the forth interpreter and compiler up and running.
 

@@ -75,7 +75,7 @@
 //#define READONLYSTRINGS
 #define TRACE			      /* Execution tracing */
 #define WALKBACK		      /* Walkback trace */
-//#define WORDSUSED             /* Logging of words used and unused */
+#define WORDSUSED             /* Logging of words used and unused */
 #define HIGHC	                      /* Don't use SIGINT */
 #endif /* NOMEMCHECK */
 #endif /* !INDIVIDUALLY */
@@ -88,7 +88,7 @@
 #endif
 
 #include "atldef.h"
-#include "forth.h"
+//#include "forth.h"
 
 #ifdef PICO
 #include "pico/stdlib.h"
@@ -4602,11 +4602,13 @@ static void ctrlc(sig)
 	atl_break();
 }
 #endif /* HIGHC */
-
-/*  MAIN  --  Main program.  */
-
 int main()
 {
+#include "forth.h"
+	
+/*  MAIN  --  Main program.  */
+
+
 //	char mouse[4];
 //	char mousedata[16];
 //	char *t;
@@ -4647,7 +4649,7 @@ int main()
 #endif /* SPI */
 
 #endif /* PICO */
-	V atl_eval(ATLAST);
+	V atl_eval(FORTH);
 
 	while (!tud_cdc_connected()) { sleep_ms(100);  }
 	V printf("tud_cdc_connected()\n");

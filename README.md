@@ -1,5 +1,5 @@
 # pico_atlast
-This is how to install this on a raspberry pi 4B.
+This is how to install this on a raspberry pi 4.
 
 Download the shellscript pico_setup.sh and make it executable. Run it from your home directory.
 <pre>wget https://raw.githubusercontent.com/raspberrypi/pico-setup/master/pico_setup.sh
@@ -8,16 +8,24 @@ chmod 744 pico_setup.sh
 
 If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
 
-Clone this git repository from your home directory and copy the files to a directory in ~/pico
+Clone pico-project-generator in your home directory 
 <pre>sudo apt install git
+git clone https://github.com/raspberrypi/pico-project-generator
+sudo apt install python3-tk
+cd pico-project-generator
+./pico_project.py --gui</pre>
+Name project atlast and place it in the pico directory and press OK
+<pre> 
+Clone this git repository in your home directory and copy the files to the atlast directory in ~/pico
+<pre>
 git clone https://github.com/skvamme/pico_atlast
-cd ~/pico
-mkdir pico_atlast
 cd pico_atlast
-cp ~/pico_atlast/*.* .
-mkdir build
+cp *.* ~/pico/atlast
 </pre>
-
+Compile pico_atlast
+<pre>cd ~/pico/atlast/build
+make
+</pre>
 Compiles out of the box, no C-programming knowledge required to use the ATLAST forth console. Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine. 
 
 Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf

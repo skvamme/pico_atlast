@@ -58,7 +58,7 @@ Start xterm
 Connect to the pico with 
 <pre>cu --nostop -l /dev/ttyACM0 -s 115200</pre>
 
-Now, you have the forth interpreter and compiler up and running. If you did't make your own forth.h, turn off sixel scrolling in xterm with ctrl-middlemousebutton, and then type the forth word RUN
+Now, you have the forth interpreter and compiler up and running. If you didn't make your own forth.h, turn off sixel scrolling in xterm with ctrl-middlemousebutton, and then type the forth word RUN
 
 To exit cu, type ~ (wait for a prompt) and type  .
 

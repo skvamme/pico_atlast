@@ -40,8 +40,10 @@ And install cu
 <pre>sudo apt install cu</pre>
 
 Add a file .Xresources to your home directory with the following line 
-
+<pre>vi .Xresources
+i
 xterm*decTerminalID: vt340
+:ESC wq</pre>
 
 Start xterm
 

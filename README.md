@@ -14,7 +14,9 @@ git clone https://github.com/raspberrypi/pico-project-generator
 sudo apt install python3-tk
 cd pico-project-generator
 ./pico_project.py --gui</pre>
-Name project atlast and place it in the pico directory and press OK. Clone this git repository in your home directory and copy the files to the atlast directory in ~/pico
+Name project atlast and place it in the pico directory and press OK. 
+
+Clone this git repository in your home directory and copy the files to the atlast directory in ~/pico
 <pre>
 git clone https://github.com/skvamme/pico_atlast
 cd pico_atlast

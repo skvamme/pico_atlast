@@ -15,6 +15,7 @@ cd ~/pico
 mkdir pico_atlast
 cd pico_atlast
 cp ~/pico_atlast/*.* .
+mkdir build
 </pre>
 
 Compiles out of the box, no C-programming knowledge required to use the ATLAST forth console. Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine. 

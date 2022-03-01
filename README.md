@@ -1,28 +1,41 @@
 # pico_atlast
-This is how to install this on a raspberry pi 4B.
+ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment. Compiles out of the box, no C-programming knowledge required to use the ATLAST forth console. Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine. 
+
+Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
+
+Here is one way to install this on a raspberry pi 4. If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
 
 Download the shellscript pico_setup.sh and make it executable. Run it from your home directory.
 <pre>wget https://raw.githubusercontent.com/raspberrypi/pico-setup/master/pico_setup.sh
 chmod 744 pico_setup.sh
 ./pico_setup.sh</pre>
 
-If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
-
-Clone this git repository from your home directory and copy the files to a directory in ~/pico
+Clone pico-project-generator in your home directory 
 <pre>sudo apt install git
+git clone https://github.com/raspberrypi/pico-project-generator
+sudo apt install python3-tk
+cd pico-project-generator
+./pico_project.py --gui</pre>
+Name project atlast and place it in the pico directory. Check all Library Options. Check "console over usb" and uncheck "console over UART". Press OK. 
+
+Clone this git repository in your home directory and copy the files to the atlast directory in ~/pico
+<pre>
 git clone https://github.com/skvamme/pico_atlast
-cd ~/pico
-mkdir pico_atlast
 cd pico_atlast
-cp ~/pico_atlast/*.* .
-mkdir build
+cp *.* ~/pico/atlast
 </pre>
 
-Compiles out of the box, no C-programming knowledge required to use the ATLAST forth console. Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine. 
+Go to ~/pico/atlast and open the file CMakeLists.txt and add a line to the list of User requested libraries down at the end of the file. Put it right after hardware_spi. These two are actually needed, comment out the other ones if you like.
+<pre>hardware_spi
+hardware_adc
+</pre>
 
-Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
+Compile pico_atlast
+<pre>cd ~/pico/atlast/build
+make
+</pre>
 
-ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment.
+Hold the BOOTSEL button down while connecting the pico to the raspberry pi USB port. The pico mounts as an external drive. Drag and drop the file atlast.uf2 from ~/pico/atlast/build to the pico external drive. It will now deconnect.
 
 Upgrade your Xterm to the latest version. 
 
@@ -33,8 +46,10 @@ And install cu
 <pre>sudo apt install cu</pre>
 
 Add a file .Xresources to your home directory with the following line 
-
+<pre>vi .Xresources
+i
 xterm*decTerminalID: vt340
+:ESC wq</pre>
 
 Start xterm
 
@@ -62,12 +77,12 @@ If you want to make your forth code remain after power off, use the shell script
 
 2. Run "./atl2h.sh anyname.atl" to create the file forth.h. 
 
-3. Compile atlast.c with make in the build directory, see https://github.com/raspberrypi/pico-sdk 
+3. Compile atlast.c with make in the build directory.
 
 If forth is the main entry point, the forth code must contain a word "GO" with an infinite loop, e.g. begin ... again to keep the application running. Otherwise, you will get an interactive console where you can use all the standard forth words, your own word definitions from forth.h and even define new words. New word definitions will last until power off. Use the construct "kbhit? if exit then" to be able to break out from a begin ... again loop.
 
 ******************************************************************************************
-Read the PICO documentation for the C/C++ API for a detailed description of each function.
+Read the PICO documentation for the C/C++ API for a detailed description of each function. https://datasheets.raspberrypi.com/pico/raspberry-pi-pico-c-sdk.pdf
 
 Defined words:
 

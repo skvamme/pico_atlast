@@ -1,5 +1,6 @@
 # pico_atlast
-ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment.
+ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment. Compiles out of the box, no C-programming knowledge required to use the ATLAST forth console. Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine. 
+
 Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
 
 Here is one way to install this on a raspberry pi 4. If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
@@ -27,7 +28,6 @@ Compile pico_atlast
 <pre>cd ~/pico/atlast/build
 make
 </pre>
-Compiles out of the box, no C-programming knowledge required to use the ATLAST forth console. Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine. 
 
 Hold the BOOTSEL button down while connecting the pico to the raspberry pi USB port. The pico mounts as an external drive. Drag and drop the file atlast.uf2 from ~/pico/atlast/build to the pico external drive. It will now deconnect.
 

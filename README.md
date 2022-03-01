@@ -18,7 +18,7 @@ cd pico-project-generator
 ./pico_project.py --gui</pre>
 Name project atlast and place it in the pico directory. Check all Library Options. Check "console over usb" and uncheck "console over UART". Press OK. 
 
-Clone this git repository in your home directory and copy the files to the atlast directory in ~/pico
+Clone this git repository in your home directory and copy the files to the atlast directory in ~/pico The reason I do it this way is that I don't want a git repository in the toolchain.
 <pre>
 git clone https://github.com/skvamme/pico_atlast
 cd pico_atlast

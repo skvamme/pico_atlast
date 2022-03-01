@@ -26,7 +26,9 @@ cp *.* ~/pico/atlast
 </pre>
 
 Go to ~/pico/atlast and open the file CMakeLists.txt and add a line to the list of User requested libraries down at the end of the file. Put it right after hardware_spi. These two are actually needed, comment out the other ones if you like.
-<pre>hardware_adc</pre>
+<pre>hardware_spi
+hardware_adc
+</pre>
 
 Compile pico_atlast
 <pre>cd ~/pico/atlast/build

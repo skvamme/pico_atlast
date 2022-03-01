@@ -8,9 +8,14 @@ chmod 744 pico_setup.sh
 
 If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
 
-Clone this git repository from your home directory.
+Clone this git repository from your home directory and copy the files to a directory in ~/pico
 <pre>sudo apt install git
-git clone https://github.com/skvamme/pico_atlast</pre>
+git clone https://github.com/skvamme/pico_atlast
+cd ~/pico
+mkdir pico_atlast
+cd pico_atlast
+cp ~/pico_atlast/*.* .
+</pre>
 
 Compiles out of the box, no C-programming knowledge required to use the ATLAST forth console. Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine. 
 

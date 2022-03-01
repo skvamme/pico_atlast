@@ -1,5 +1,5 @@
 # pico_atlast
-This is how to install this on a raspberry pi 4.
+Here is one way to install this on a raspberry pi 4.
 
 Download the shellscript pico_setup.sh and make it executable. Run it from your home directory.
 <pre>wget https://raw.githubusercontent.com/raspberrypi/pico-setup/master/pico_setup.sh

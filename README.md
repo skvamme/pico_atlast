@@ -2,14 +2,12 @@
 ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment.
 Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
 
-Here is one way to install this on a raspberry pi 4.
+Here is one way to install this on a raspberry pi 4. If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
 
 Download the shellscript pico_setup.sh and make it executable. Run it from your home directory.
 <pre>wget https://raw.githubusercontent.com/raspberrypi/pico-setup/master/pico_setup.sh
 chmod 744 pico_setup.sh
 ./pico_setup.sh</pre>
-
-If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
 
 Clone pico-project-generator in your home directory 
 <pre>sudo apt install git

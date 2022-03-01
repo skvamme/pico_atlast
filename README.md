@@ -69,12 +69,12 @@ If you want to make your forth code remain after power off, use the shell script
 
 2. Run "./atl2h.sh anyname.atl" to create the file forth.h. 
 
-3. Compile atlast.c with make in the build directory, see https://github.com/raspberrypi/pico-sdk 
+3. Compile atlast.c with make in the build directory.
 
 If forth is the main entry point, the forth code must contain a word "GO" with an infinite loop, e.g. begin ... again to keep the application running. Otherwise, you will get an interactive console where you can use all the standard forth words, your own word definitions from forth.h and even define new words. New word definitions will last until power off. Use the construct "kbhit? if exit then" to be able to break out from a begin ... again loop.
 
 ******************************************************************************************
-Read the PICO documentation for the C/C++ API for a detailed description of each function.
+Read the PICO documentation for the C/C++ API for a detailed description of each function. https://datasheets.raspberrypi.com/pico/raspberry-pi-pico-c-sdk.pdf
 
 Defined words:
 

@@ -16,7 +16,7 @@ git clone https://github.com/raspberrypi/pico-project-generator
 sudo apt install python3-tk
 cd pico-project-generator
 ./pico_project.py --gui</pre>
-Name project atlast and place it in the pico directory. Check "run build after generation" and press OK. 
+Name project atlast and place it in the pico directory. Check all Library Options. Check "console over usb" and uncheck "console over UART". Press OK. 
 
 Clone this git repository in your home directory and copy the files to the atlast directory in ~/pico
 <pre>
@@ -24,6 +24,10 @@ git clone https://github.com/skvamme/pico_atlast
 cd pico_atlast
 cp *.* ~/pico/atlast
 </pre>
+
+Go to ~/pico/atlast and open the file CMakeLists.txt and add a line to the list of User requested libraries down at the end of the file. Put it right after hardware_spi. These two are actually needed, comment out the other ones if you like.
+<pre>hardware_adc</pre>
+
 Compile pico_atlast
 <pre>cd ~/pico/atlast/build
 make

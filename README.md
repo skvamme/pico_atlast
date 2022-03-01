@@ -35,28 +35,27 @@ Compile pico_atlast
 make
 </pre>
 
-Hold the BOOTSEL button down while connecting the pico to the raspberry pi USB port. The pico mounts as an external drive. Drag and drop the file atlast.uf2 from ~/pico/atlast/build to the pico external drive. It will now deconnect.
+Hold the BOOTSEL button down while connecting the pico to the raspberry pi USB port. The pico mounts as an external drive. Drag and drop the file atlast.uf2 from ~/pico/atlast/build to the pico external drive. It will now disconnect.
 
 Upgrade your Xterm to the latest version. 
-
 <pre>sudo apt install xterm</pre>
 
 And install cu
-
 <pre>sudo apt install cu</pre>
 
 Add a file .Xresources to your home directory with the following line 
 <pre>vi .Xresources
 i
 xterm*decTerminalID: vt340
-:ESC wq</pre>
+:ESC wq
+
+xrdb -merge .Xresources</pre>
+Note: The "i" and":ESC wq" are vi-commands. Use your favourite editor.
 
 Start xterm
-
 <pre>xterm -fn 6x12</pre>
 
- Connect to the pico with 
-
+Connect to the pico with 
 <pre>cu --nostop -l /dev/ttyACM0 -s 115200</pre>
 
 Now, you have the forth interpreter and compiler up and running.

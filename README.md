@@ -18,7 +18,7 @@ cd pico-project-generator
 ./pico_project.py --gui</pre>
 Name project atlast and place it in the pico directory. Check all Library Options. Check "console over usb" and uncheck "console over UART". Press OK. 
 
-Clone this git repository in your home directory and copy the files to the atlast directory in ~/pico
+Clone this git repository in your home directory and copy the files to the atlast directory in ~/pico The reason I do it this way is that I don't want a git repository in the toolchain.
 <pre>
 git clone https://github.com/skvamme/pico_atlast
 cd pico_atlast
@@ -35,36 +35,35 @@ Compile pico_atlast
 make
 </pre>
 
-Hold the BOOTSEL button down while connecting the pico to the raspberry pi USB port. The pico mounts as an external drive. Drag and drop the file atlast.uf2 from ~/pico/atlast/build to the pico external drive. It will now deconnect.
+Hold the BOOTSEL button down while connecting the pico to the raspberry pi USB port. The pico mounts as an external drive. Drag and drop the file atlast.uf2 from ~/pico/atlast/build to the pico external drive. It will now disconnect.
 
 Upgrade your Xterm to the latest version. 
-
 <pre>sudo apt install xterm</pre>
 
 And install cu
-
 <pre>sudo apt install cu</pre>
 
 Add a file .Xresources to your home directory with the following line 
 <pre>vi .Xresources
 i
 xterm*decTerminalID: vt340
-:ESC wq</pre>
+:ESC wq
+
+xrdb -merge .Xresources</pre>
+Note: The "i" and":ESC wq" are vi-commands. Use your favourite editor.
 
 Start xterm
-
 <pre>xterm -fn 6x12</pre>
 
- Connect to the pico with 
-
+Connect to the pico with 
 <pre>cu --nostop -l /dev/ttyACM0 -s 115200</pre>
 
-Now, you have the forth interpreter and compiler up and running.
+Now, you have the forth interpreter and compiler up and running. If you didn't make your own forth.h, turn off sixel scrolling in xterm with ctrl-middlemousebutton, and then type the forth word RUN
 
 To exit cu, type ~ (wait for a prompt) and type  .
 
 There is a nice feature in cu, type ~ (wait for the prompt) and type > and give a file name you want to download to the pico.
-You can try different versions of your atlast forth files before creating the .h file with atl2h.sh Use the forth word FORGET to erase words you don't want. Note: The last character in your forth files should be a new line. Alternatively, reconfigure cu to put in a nl/cr instead of the default EOF.
+You can try different versions of your atlast forth files before creating the .h file with atl2h.sh Use the forth word FORGET to erase words you don't want. Note: The last character in your forth files should be a new line. Alternatively, reconfigure cu to put in a nl/cr instead of the default EOF. Press enter when "File transfer complete" to clear kb buffer.
 
 The other way around is also possible, type ~ (wait for the prompt) and type < and give a file name you want to use for saving data from pico. Type it as both infile and outfile, and then type a forth word that prints the data.
 

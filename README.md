@@ -47,10 +47,10 @@ Add a file .Xresources to your home directory with the following line
 <pre>vi .Xresources
 i
 xterm*decTerminalID: vt340
-:ESC wq
+ESC :wq
 
 xrdb -merge .Xresources</pre>
-Note: The "i" and":ESC wq" are vi-commands. Use your favourite editor.
+Note: The "i" and"ESC :wq" are vi-commands. Use your favourite editor.
 
 Start xterm
 <pre>xterm -fn 6x12</pre>

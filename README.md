@@ -123,6 +123,9 @@ U.
 EMIT
 	( integer -- ) Print ASCII integer as a char
 	
+BOOTSEL
+	( -- ) Re-boot pico in external drive mode.
+	
 GPIO_INIT
 	( gpiopin --  )
 

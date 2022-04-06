@@ -38,6 +38,8 @@ make
 
 Hold the BOOTSEL button down while connecting the pico to the raspberry pi USB port. The pico mounts as an external drive. Drag and drop the file atlast.uf2 from ~/pico/atlast/build to the pico external drive. It will now disconnect.
 
+From now on you can use the forth word BOOTSEL to reboot the pico as an external drive; drag and drop a new uf2-file without the need to unplug and hold button.
+
 Upgrade your Xterm to the latest version. 
 <pre>sudo apt install xterm</pre>
 

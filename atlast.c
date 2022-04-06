@@ -92,6 +92,7 @@
 
 #ifdef PICO
 #include "pico/stdlib.h"
+#include "pico/bootrom.h"
 #include "hardware/spi.h"
 #include "hardware/adc.h"
 #include <tusb.h>
@@ -2760,6 +2761,11 @@ prim P_juliantime() /* seconds since 1970-01-01 */
     Push = (stackitem) time(NULL);
 }
 
+prim P_bootsel() /* -- */
+{
+	reset_usb_boot(0,0);
+}
+
 #endif /* SYSTEM */
 
 #ifdef TRACE
@@ -3620,6 +3626,7 @@ static struct primfcn primt[] = {
 #ifdef SYSTEM
     {"0SYSTEM", P_system},
     {"0TIME", P_juliantime},
+	{"0BOOTSEL", P_bootsel},
 #endif
 #ifdef TRACE
     {"0TRACE", P_trace},

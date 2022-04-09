@@ -45,6 +45,8 @@ Upgrade your Xterm to the latest version.
 
 And install cu
 <pre>sudo apt install cu</pre>
+If you are on a Mac, cu is part of the Taylor UUCP package, install with MacPorts:
+<pre>sudo port install uucp</pre>
 
 Add a file .Xresources to your home directory with the following line 
 <pre>vi .Xresources

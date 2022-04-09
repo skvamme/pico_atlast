@@ -62,6 +62,8 @@ Start xterm
 
 Connect to the pico with 
 <pre>cu --nostop -l /dev/ttyACM0 -s 115200</pre>
+If you are on a Mac, the serial port is something like
+<pre>sudo cu --nostop -l /dev/cu.usbmodem141201 -s 115200</pre>
 
 Now, you have the forth interpreter and compiler up and running. If you didn't make your own forth.h, turn off sixel scrolling in xterm with ctrl-middlemousebutton, and then type the forth word RUN
 

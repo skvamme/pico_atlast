@@ -1,7 +1,7 @@
 # pico_atlast
 ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built in forth scripting environment. Compiles out of the box, no C-programming knowledge required to use the ATLAST forth console. Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine. 
 
-Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
+Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf Charles Moore, the inventor of forth: http://www.ultratechnology.com/1xforth.htm
 
 Here is one way to install this on a raspberry pi 4. If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
 
@@ -45,6 +45,8 @@ Upgrade your Xterm to the latest version.
 
 And install cu
 <pre>sudo apt install cu</pre>
+If you are on a Mac, cu is part of the Taylor UUCP package, install with MacPorts:
+<pre>sudo port install uucp</pre>
 
 Add a file .Xresources to your home directory with the following line 
 <pre>vi .Xresources
@@ -60,6 +62,8 @@ Start xterm
 
 Connect to the pico with 
 <pre>cu --nostop -l /dev/ttyACM0 -s 115200</pre>
+If you are on a Mac, the serial port is something like
+<pre>sudo cu --nostop -l /dev/cu.usbmodem141201 -s 115200</pre>
 
 Now, you have the forth interpreter and compiler up and running. If you didn't make your own forth.h, turn off sixel scrolling in xterm with ctrl-middlemousebutton, and then type the forth word RUN
 
@@ -70,7 +74,7 @@ You can try different versions of your atlast forth files before creating the .h
 
 The other way around is also possible, type ~ (wait for the prompt) and type < and give a file name you want to use for saving data from pico. Type it as both infile and outfile, and then type a forth word that prints the data.
 
-The following terminal emulators can do sixel graphics: XTerm (360 or later), MLterm (3.8.4), Contour (0.1.1), WezTerm (20210502), Mintty (3.5.0), RLogin (2.25.3), XQuartz and Reflection Desktop (16.2.0).
+The following terminal emulators can do sixel graphics: XTerm (360 or later), MLterm (3.8.4), Contour (0.1.1), WezTerm (20210502), Mintty (3.5.0), RLogin (2.25.3), XQuartz, MacTerm and Reflection Desktop (16.2.0).
 *******************************************************************************************
 
 If you want to make your forth code remain after power off, use the shell script atl2h.sh.
@@ -122,6 +126,9 @@ U.
 	
 EMIT
 	( integer -- ) Print ASCII integer as a char
+	
+BOOTSEL
+	( -- ) Re-boot pico in external drive mode.
 	
 GPIO_INIT
 	( gpiopin --  )

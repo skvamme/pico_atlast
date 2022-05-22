@@ -26,9 +26,11 @@ cd pico_atlast
 cp *.* ~/pico/atlast
 </pre>
 
-Go to ~/pico/atlast and open the file CMakeLists.txt and add a line to the list of User requested libraries down at the end of the file. Put it right after hardware_spi. These two are actually needed, comment out the other ones if you like.
+Go to ~/pico/atlast and open the file CMakeLists.txt and add a line to the list of User requested libraries down at the end of the file. Put it right after hardware_spi. These two are actually needed, comment out the other ones if you like. Add a last line to the file, make the C-function malloc return 0 if out of memory for the forth word memstat to work.
 <pre>hardware_spi
 hardware_adc
+# Last line, make malloc return 0 on out of memory
+target_compile_definitions(atlast PRIVATE PICO_MALLOC_PANIC=0)
 </pre>
 
 Compile pico_atlast

@@ -617,11 +617,16 @@ Exported char *atl_fgetsp(s, n, stream)
 #ifdef MEMSTAT
 void atl_memstat()
 {
+	long* ptr = (long*) 1;
+	int i = 1;
     static char fmt[] = "   %-12s %6ld    %6ld    %6ld       %3ld\n";
 
+	while ( ptr) { ptr = malloc(i * 1024); free(ptr); i++; };
+	V printf("\nFree RAM: %6ld KB of total 264 KB\n", i);
     V printf("\n             Memory Usage Summary\n\n");
     V printf("                 Current   Maximum    Items     Percent\n");
     V printf("  Memory Area     usage     used    allocated   in use \n");
+	
 
     V printf(fmt, "Stack",
 	((long) (stk - stack)),
@@ -4627,7 +4632,7 @@ int main()
 //    Return stack length. Expressed as a number of 4 byte return stack pointer items. Default 100. 
 	atl_rstklen = 100;
 //    Heap length. Specified as a number of 4 byte stack items. Default 1000. 
-	atl_heaplen = 1000;
+	atl_heaplen = 40000;
 //    Temporary string length. Gives the length of the buffers used to hold temporary strings entered in 
 //	interpretive mode and created by certain primitives. Default 256. 
 	atl_ltempstr = 32;

@@ -3580,6 +3580,26 @@ Web version 1.2: October, 2007
 </tr>
 <tr>
     <td class="c1">
+	    BLOCK
+    </td>
+    <td class="c2">
+		n
+    </td>
+    <td class="c3">
+	    &rarr;
+    </td>
+    <td class="c4">
+		addr
+    </td>
+    <td class="c5">
+    	    <b>Block address</b><br />
+	    Return block number n memory address on stack.
+    </td>
+    <td class="c6">
+    </td>
+</tr>
+<tr>
+    <td class="c1">
 	    BODY&gt;
     </td>
     <td class="c2">
@@ -3619,6 +3639,26 @@ Web version 1.2: October, 2007
 	    (parameter) address.
     </td>
     <td class="c6">
+    </td>
+</tr>
+<tr>
+    <td class="c1">
+	    BOOTSEL
+    </td>
+    <td class="c2">
+    </td>
+    <td class="c3">
+	    &rarr;
+    </td>
+    <td class="c4">
+    </td>
+    <td class="c5">
+    	    <b>Re-boot as storage device</b><br />
+	    Pico mounts as external disc. No need to unplug and
+		hold the bootsel button.
+    </td>
+    <td class="c6">
+	    SYSTEM
     </td>
 </tr>
 <tr>
@@ -4093,6 +4133,26 @@ Web version 1.2: October, 2007
         Prints the char with the ASCII value <i>int</i>.
     </td>
     <td class="c6">
+    </td>
+</tr>
+<tr>
+    <td class="c1">
+        EMPTYBUFFER
+    </td>
+    <td class="c2">
+        n
+    </td>
+    <td class="c3">
+        &rarr;
+    </td>
+    <td class="c4">
+    </td>
+    <td class="c5">
+            <b>Empty a buffer</b><br />
+        Empty the buffer n <i>int</i> before saving to it.
+    </td>
+    <td class="c6">
+		SYSTEM
     </td>
 </tr>
 <tr>
@@ -5137,6 +5197,26 @@ Web version 1.2: October, 2007
 </tr>
 <tr>
     <td class="c1">
+	    LIST
+    </td>
+    <td class="c2">
+		buffernumber format
+    </td>
+    <td class="c3">
+	    &rarr;
+    </td>
+    <td class="c4">
+    </td>
+    <td class="c5">
+    	    <b>List buffer</b><br />
+	    List the buffer on screen in format text (0) or binary (1)
+    </td>
+    <td class="c6">
+		System
+    </td>
+</tr>
+<tr>
+    <td class="c1">
 	    (LIT)
     </td>
     <td class="c2">
@@ -5197,6 +5277,26 @@ Web version 1.2: October, 2007
     </td>
     <td class="c6">
 	    MATH
+    </td>
+</tr>
+<tr>
+    <td class="c1">
+	    LOAD
+    </td>
+    <td class="c2">
+	    n
+    </td>
+    <td class="c3">
+	    &rarr;
+    </td>
+    <td class="c4">
+    </td>
+    <td class="c5">
+    	    <b>Load a module</b><br />
+	    The module number n is compiled into the system.
+    </td>
+    <td class="c6">
+	    SYSTEM
     </td>
 </tr>
 <tr>
@@ -5957,6 +6057,26 @@ Web version 1.2: October, 2007
     </td>
     <td class="c6">
 	    DEFFIELDS
+    </td>
+</tr>
+<tr>
+    <td class="c1">
+	    SAVEBUFFER
+    </td>
+    <td class="c2">
+	    str buffer page
+    </td>
+    <td class="c3">
+	    &rarr;
+    </td>
+    <td class="c4">
+    </td>
+    <td class="c5">
+    	    <b>Save str to buffer</b><br />
+	    Use EMPTYBUFFER before SAVEBUFFER. Buffer is a 4k area 
+		and Page is a 256 bytes area inside the 4k.
+    </td>
+    <td class="c6">
     </td>
 </tr>
 <tr>

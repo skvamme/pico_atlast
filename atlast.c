@@ -95,6 +95,7 @@
 #include "pico/bootrom.h"
 #include "hardware/spi.h"
 #include "hardware/adc.h"
+#include "hardware/flash.h"
 #include <tusb.h>
 #define L 131
 unsigned char str[L+1];
@@ -2754,6 +2755,8 @@ prim P_storename()		      /* Store string buffer in word name */
 #endif /* DEFFIELDS */
 
 #ifdef SYSTEM
+#define FLASH_TARGET_OFFSET (256 * 1024)
+
 prim P_system()
 {				      /* string -- status */
     Sl(1);
@@ -2763,12 +2766,79 @@ prim P_system()
  
 prim P_juliantime() /* seconds since 1970-01-01 */
 {
+	So(1);
     Push = (stackitem) time(NULL);
 }
 
 prim P_bootsel() /* -- */
 {
 	reset_usb_boot(0,0);
+}
+
+void print_buf(const uint8_t *buf, size_t len) 
+{ 
+	for (size_t i = 0; i < len; ++i) { 
+		printf("%02x", buf[i]); 
+		if (i % 16 == 15) printf("\n"); 
+		else printf(" "); 
+		} 
+}
+
+prim P_list() /* n n -- */
+{
+    Sl(2);
+	const uint8_t *flash_target_contents = (const uint8_t *) 
+		(XIP_BASE + FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE * S1));
+	if(S0 == 1)
+		print_buf(flash_target_contents, FLASH_PAGE_SIZE); // FLASH_PAGE_SIZE = 256 byte
+	else
+		V printf("%s\n", flash_target_contents);
+	Pop;
+	Pop;
+}
+
+prim P_load() /* n -- */
+{
+    Sl(1);
+	uint8_t random_data[FLASH_PAGE_SIZE];
+	
+	const uint8_t *flash_target_contents = (const uint8_t *) 
+		(XIP_BASE + FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE *  S0));
+//	V strcpy(flash_target_contents, random_data);
+	V atl_eval(flash_target_contents);
+	Pop;
+}
+
+prim P_block() /* n -- addr */
+{
+    Sl(1);
+
+	S0 = (stackitem) XIP_BASE + FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE * S0);
+}
+
+prim P_emptybuffer()  /* n -- */
+{
+    Sl(1);
+
+//	const uint32_t flash_target_contents = (const uint32_t ) 
+//		(XIP_BASE + FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE * S0));
+
+    flash_range_erase(FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE * S0), FLASH_SECTOR_SIZE);
+	Pop;
+}
+
+prim P_savebuffer()  /* str n n -- */
+{
+    Sl(3); /* string to save, in a buffer n, with pagesize n */
+
+//	const uint32_t flash_target_contents = (const uint32_t ) 
+//		(XIP_BASE + FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE * S1));
+	
+	flash_range_program(FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE * S1), 
+		( const uint8_t*) S2, (FLASH_PAGE_SIZE * S0));
+	Pop;
+	Pop;
+	Pop;
 }
 
 #endif /* SYSTEM */
@@ -3632,6 +3702,11 @@ static struct primfcn primt[] = {
     {"0SYSTEM", P_system},
     {"0TIME", P_juliantime},
 	{"0BOOTSEL", P_bootsel},
+	{"0LIST", P_list},
+	{"0LOAD", P_load},
+	{"0BLOCK", P_block},
+	{"0EMPTYBUFFER", P_emptybuffer},
+	{"0SAVEBUFFER", P_savebuffer},
 #endif
 #ifdef TRACE
     {"0TRACE", P_trace},
@@ -4632,12 +4707,12 @@ int main()
 //    Return stack length. Expressed as a number of 4 byte return stack pointer items. Default 100. 
 	atl_rstklen = 100;
 //    Heap length. Specified as a number of 4 byte stack items. Default 1000. 
-	atl_heaplen = 40000;
+	atl_heaplen = 1000;
 //    Temporary string length. Gives the length of the buffers used to hold temporary strings entered in 
 //	interpretive mode and created by certain primitives. Default 256. 
-	atl_ltempstr = 32;
+	atl_ltempstr = 256;
 //	Number of temporary strings.
-	atl_ntempstr = 25;
+	atl_ntempstr = 10;
 	atl_init();
 #ifdef PICO
 	stdio_init_all();

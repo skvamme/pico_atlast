@@ -3,6 +3,8 @@ ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built i
 
 Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf Charles Moore, the inventor of forth gave an interview here [http://www.ultratechnology.com/1xforth.htm]and a presentation here [https://www.youtube.com/watch?v=0PclgBd6_Zs] Here is a nice tutorial from Shropshire LUG - Oct 2020 https://www.youtube.com/watch?v=EADDOnRtFrI
 
+Latest commit: Use FORTH blocks to store source code and data. New words are LIST, LOAD, BLOCK, EMPTUBUFFER, SAVEBUFFER. See atlast.html
+
 Here is one way to install this on a raspberry pi 4. If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
 
 Download the shellscript pico_setup.sh and make it executable. Run it from your home directory.

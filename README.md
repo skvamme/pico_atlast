@@ -25,6 +25,7 @@ Clone this pico_atlast git repository in your home directory and copy the files 
 <pre>
 git clone https://github.com/skvamme/pico_atlast
 cd pico_atlast
+mv CMakeLists.txt CMakeLists.original
 cp *.* ~/pico/atlast
 </pre>
 

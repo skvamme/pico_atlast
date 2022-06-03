@@ -5,7 +5,7 @@ Documentation: http://www.fourmilab.ch/atlast/ and https://www.forth.com/startin
 
 <b>Latest commit:</b> Use FORTH blocks to store source code and data in FLASH. New words are LIST, LOAD, BLOCK, EMPTYBUFFER, SAVEBUFFER. See atlast.html. ATLAST Forth now running in RAM.
 
-Here is one way to install this on a raspberry pi 4. If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
+Here is one way to install this on a raspberry pi (I have a pi 4). If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
 
 Download the shellscript pico_setup.sh and make it executable. Run it from your home directory.
 <pre>wget https://raw.githubusercontent.com/raspberrypi/pico-setup/master/pico_setup.sh

@@ -1,0 +1,7 @@
+( Append all strings on stack to a string buffer, in reverse order)
+
+4096 STRING buffer
+
+: STACKSTRINGS "" buffer strcpy depth 0 do depth 1 - roll buffer strcat "\n" buffer strcat loop ;
+
+

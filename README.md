@@ -76,10 +76,11 @@ If you are on a Mac, the serial port is something like
 
 To exit cu, type ~ (wait for a prompt) and type  .
 
-There is a nice feature in cu, type ~ (wait for the prompt) and type > and give a file name you want to download to the pico.
-You can try different versions of your atlast forth files before creating the .h file with atl2h.sh Use the forth word FORGET to erase words you don't want. Note: The last character in your forth files should be a new line. Alternatively, reconfigure cu to put in a nl/cr instead of the default EOF. Press enter when "File transfer complete" to clear kb buffer.
+There is a nice feature in cu, type ~ (wait for the prompt) and type > and give a file name you want to download to the pico. Use the forth word FORGET to erase words you don't want. 
 
-The other way around is also possible, type ~ (wait for the prompt) and type < and give a file name you want to use for saving data from pico. Type it as both infile and outfile, and then type a forth word that prints the data.
+Note: The last character in your forth files should be a new line. Alternatively, reconfigure cu to put in a nl/cr instead of the default EOF. Press enter when "File transfer complete" to clear kb buffer.
+
+The other way around is also possible, type ~ (wait for the prompt) and type < and give a file name you want to use for saving data from pico. Type it as both infile and outfile, and then type a forth word that prints the data e.g. 1 0 list to get the contents of flash block 1.
 
 The following terminal emulators can do sixel graphics: XTerm (360 or later), MLterm (3.8.4), Contour (0.1.1), WezTerm (20210502), Mintty (3.5.0), RLogin (2.25.3), XQuartz, MacTerm and Reflection Desktop (16.2.0).
 *******************************************************************************************

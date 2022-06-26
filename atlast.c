@@ -4684,16 +4684,7 @@ static void ctrlc(sig)
 #endif /* HIGHC */
 int main()
 {
-#include "forth.h"
-	
 /*  MAIN  --  Main program.  */
-
-
-//	char mouse[4];
-//	char mousedata[16];
-//	char *t;
-//	char pre[132];
-
 	
 //    Evaluation (data) stack length. Expressed as a number of 4 byte stack items. Default 100. 
 	atl_stklen = 100;
@@ -4729,15 +4720,14 @@ int main()
 #endif /* SPI */
 
 #endif /* PICO */
-	V atl_eval(FORTH);
 
 	while (!tud_cdc_connected()) { sleep_ms(100);  }
 	V printf("tud_cdc_connected()\n");
 	V printf("ATLAST 1.2 (2007-10-07) This program is in the public domain.\n");
-    V atl_eval("GO");
+    V atl_eval("0 LOAD");
 	while (TRUE) {
 		V printf(atl_comment ? "(  " :  /* Show pending comment */
-		(((heap != NULL) && state) ? ":> " : "-> ")); /* Show compiling state */
+		(((heap != NULL) && state) ? ":> " : "$> ")); /* Show compiling state */
 			V atl_eval(readLine());
 	}    
 	return 0;

@@ -3,7 +3,7 @@ ATLAST Forth for Raspberry Pi Pico is a boilerplate C application with a built i
 
 <b>Documentation:</b> http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf Charles Moore, the inventor of forth gave an interview here http://www.ultratechnology.com/1xforth.htm and a presentation here https://www.youtube.com/watch?v=0PclgBd6_Zs Here is a nice tutorial from Shropshire LUG - Oct 2020 https://www.youtube.com/watch?v=EADDOnRtFrI
 
-<b>Latest commit:</b> Use FORTH blocks to store source code and data in FLASH. New words are LIST, LOAD, BLOCK, EMPTYBUFFER, SAVEBUFFER. See atlast.html. ATLAST Forth now running in RAM. Try 63 0 LIST and you will get a text result from Production Test.
+<b>Latest commit:</b> Use FORTH blocks to store source code and data in FLASH. New words are LIST, LOAD, BLOCK, EMPTYBUFFER, SAVEBUFFER. See atlast.html. ATLAST Forth now running in RAM. Try 63 0 LIST and you will get a text result from Factory Production Test. To store something in a flash block, write it in a file. Max line width 130 characters. Run the shell script atl2blk.sh yourfilename.whatever The result is a file blk.atl Connect to your pico, and in cu type ~ (wait for a prompt) type > (enter) and type the name of the file to import BLK.ATL. Result is each file line as a separate string on the stack. Copy paste the text in the file blockzero.atl and run the word STACKSTRINGS It will put all the strings on the stack into one string buffer. Type 5 EMPTYBUFFER and BUFFER 5 SAVEBUFFER (5 is just an example, there is really a lot of space here). Now you can type 5 0 list or 5 load if it was forth code. 
 
 <b>Installation:</b> Here is one way to install this on a raspberry pi (Verified on a pi 4). If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
 
@@ -74,14 +74,13 @@ Connect to the pico with
 If you are on a Mac, the serial port is something like
 <pre>sudo cu --nostop -l /dev/cu.usbmodem141201 -s 115200</pre>
 
-Now, you have the forth interpreter and compiler up and running. If you didn't make your own forth.h, turn off sixel scrolling in xterm with ctrl-middlemousebutton, and then type the forth word RUN
-
 To exit cu, type ~ (wait for a prompt) and type  .
 
-There is a nice feature in cu, type ~ (wait for the prompt) and type > and give a file name you want to download to the pico.
-You can try different versions of your atlast forth files before creating the .h file with atl2h.sh Use the forth word FORGET to erase words you don't want. Note: The last character in your forth files should be a new line. Alternatively, reconfigure cu to put in a nl/cr instead of the default EOF. Press enter when "File transfer complete" to clear kb buffer.
+There is a nice feature in cu, type ~ (wait for the prompt) and type > and give a file name you want to download to the pico. Use the forth word FORGET to erase words you don't want. 
 
-The other way around is also possible, type ~ (wait for the prompt) and type < and give a file name you want to use for saving data from pico. Type it as both infile and outfile, and then type a forth word that prints the data.
+Note: The last character in your forth files should be a new line. Alternatively, reconfigure cu to put in a nl/cr instead of the default EOF. Press enter when "File transfer complete" to clear kb buffer.
+
+The other way around is also possible, type ~ (wait for the prompt) and type < and give a file name you want to use for saving data from pico. Type it as both infile and outfile, and then type a forth word that prints the data e.g. 1 0 list to get the contents of flash block 1.
 
 The following terminal emulators can do sixel graphics: XTerm (360 or later), MLterm (3.8.4), Contour (0.1.1), WezTerm (20210502), Mintty (3.5.0), RLogin (2.25.3), XQuartz, MacTerm and Reflection Desktop (16.2.0).
 *******************************************************************************************

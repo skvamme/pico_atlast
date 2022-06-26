@@ -85,17 +85,6 @@ The other way around is also possible, type ~ (wait for the prompt) and type < a
 The following terminal emulators can do sixel graphics: XTerm (360 or later), MLterm (3.8.4), Contour (0.1.1), WezTerm (20210502), Mintty (3.5.0), RLogin (2.25.3), XQuartz, MacTerm and Reflection Desktop (16.2.0).
 *******************************************************************************************
 
-If you want to make your forth code remain after power off, use the shell script atl2h.sh.
-
-1. Put your forth code in a file,  "anyname.atl". Make sure to keep source line width below max column 132.
-
-2. Run "./atl2h.sh anyname.atl" to create the file forth.h. 
-
-3. Compile atlast.c with make in the build directory.
-
-If forth is the main entry point, the forth code must contain a word "GO" with an infinite loop, e.g. begin ... again to keep the application running. Otherwise, you will get an interactive console where you can use all the standard forth words, your own word definitions from forth.h and even define new words. New word definitions will last until power off. Use the construct "kbhit? if exit then" to be able to break out from a begin ... again loop.
-
-******************************************************************************************
 Read the PICO documentation for the C/C++ API for a detailed description of each function. https://datasheets.raspberrypi.com/pico/raspberry-pi-pico-c-sdk.pdf
 
 Defined words:

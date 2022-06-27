@@ -74,6 +74,9 @@ Connect to the pico with
 If you are on a Mac, the serial port is something like
 <pre>sudo cu --nostop -l /dev/cu.usbmodem141201 -s 115200</pre>
 
+Put some Forth code in block 0 (block 0 is autoloaded at startup)
+<pre>".( \"Hello from buffer 0\" cr" 0 savebuffer</pre>
+
 To exit cu, type ~ (wait for a prompt) and type  .
 
 There is a nice feature in cu, type ~ (wait for the prompt) and type > and give a file name you want to download to the pico. Use the forth word FORGET to erase words you don't want. 

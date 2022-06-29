@@ -1,0 +1,60 @@
+STACKSTRINGS ( str1 str2 str3 strn -- ) 
+
+This is the documentation for the previous block. (You need to copy/paste the contents of blockzero.atl
+to the forth terminal in order to define the forth word STACKSTRINGS).
+
+STACKSTRINGS takes everything on the stack and puts it in a string buffer, in reverse order.  In other words,
+the last line in your text should be on top of the stack.
+
+The string buffer can then be used as the source buffer for the forth word SAVEBUFFER.
+
+
+Max string length is 130 and max number of strings on the stack is 100.
+
+These values can easily be changed in atlast.c main function.
+
+
+The buffer size is 4096 bytes. This corresponds to 50 lines of code if you keep line length to 80.
+
+Blank lines counts as 1 byte.
+
+Make sure the stack is empty before you put your strings on it.
+
+
+If you have a text file that you want to put in a forth block, use the shell script atl2blk.sh
+
+It converts your text file to a file where each line is a separate string.
+
+Copy-paste the contents into your forth terminal or use the CU file transfer command.
+
+Then use STACKSTRINGS to fill the string buffer and SAVEBUFFER to save the data.
+
+
+Example
+
+You have a file, blockone.txt that you want to load into block 1.
+
+Run the shell script:
+
+./atl2blk.sh blockone.txt
+
+And in the forth terminal:
+
+~ >
+blk.atl
+
+(or just copy paste the contents of blk.atl to the forth terminal)
+
+STACKSTRINGS
+
+1 EMPTYBUFFER
+
+BUFFER 1 SAVEBUFFER
+
+Now you can try:
+
+1 0 LIST
+
+to list the contents of block 1
+
+This content will survive both poweroff and drag/drop a new uf2 file to the pico.

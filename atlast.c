@@ -53,13 +53,14 @@
 #define ARRAY			      /* Array subscripting words */
 //#define BREAK			      /* Asynchronous break facility */
 #define Keyhit		      /* Stop and start wordlisting */
-#define COMPILERW		      /* Compiler-writing words */
+//#define COMPILERW		      /* Compiler-writing words */
 #define CONIO			      /* Interactive console I/O */
 #define DEFFIELDS		      /* Definition field access for words */
 #define DOUBLE                     /* Double word primitives (2DUP) */
 #define EVALUATE		      /* The EVALUATE primitive */
 #define FILEIO			      /* File I/O primitives */
 #define PICO                          /* Raspberry Pi PICO functions */
+#define PICOW					/* Raspberry Pi PICO W functions, PICO must also be defined */
 #define MATH			      /* Math functions */
 #define MEMMESSAGE           /* Print message for stack/heap errors */
 //#define PROLOGUE		      /* Prologue processing and auto-init */
@@ -73,9 +74,9 @@
 #define ALIGNMENT
 #define EXPORT
 //#define READONLYSTRINGS
-#define TRACE			      /* Execution tracing */
+//#define TRACE			      /* Execution tracing */
 #define WALKBACK		      /* Walkback trace */
-#define WORDSUSED             /* Logging of words used and unused */
+//#define WORDSUSED             /* Logging of words used and unused */
 #define HIGHC	                      /* Don't use SIGINT */
 #endif /* NOMEMCHECK */
 #endif /* !INDIVIDUALLY */
@@ -88,7 +89,6 @@
 #endif
 
 #include "atldef.h"
-//#include "forth.h"
 
 #ifdef PICO
 #include "pico/stdlib.h"
@@ -98,6 +98,19 @@
 #include "hardware/flash.h"
 #include <tusb.h>
 #define L 131
+
+#ifdef PICOW
+#include "pico/cyw43_arch.h"
+#include "lwip/apps/http_client.h"
+
+#include "lwip/pbuf.h"
+#include "lwip/tcp.h"
+//#include "lwip/dns.h"
+
+ip_addr_t host_ip; 
+httpc_connection_t settings; 
+#endif /* PICOW */
+
 unsigned char str[L+1];
 
 unsigned char *readLine() {
@@ -113,13 +126,13 @@ unsigned char *readLine() {
     printf("\n");
     return str;
 }
-
 #define GPIO
-//#define SPI
+#define SPI
 #define ADC
 //#define MULTICORE
 #define WATCHDOG
-#define QUEUE
+//#define QUEUE
+
 
 #ifdef MULTICORE
 #include "pico/multicore.h"
@@ -2961,7 +2974,97 @@ prim P_fwdresolve()		      /* Emit forward jump offset */
 
 #endif /* COMPILERW */
 
+
+
 #ifdef PICO
+#ifdef PICOW
+
+/* Callback functions */
+
+err_t headers(httpc_state_t *connection, void *arg, struct pbuf *hdr, u16_t hdr_len, u32_t content_len) 
+{ 
+	char myBuff[1000];
+	
+	printf("headers recieved\n"); 
+	printf("content length=%d\n", content_len); 
+	printf("header length %d\n", hdr_len); 
+//	pbuf_copy_partial(hdr, myBuff, hdr->tot_len, 0); 
+//	printf("\n\nheaders\n"); 
+//	printf("%s", myBuff); 
+	return ERR_OK; 
+}
+
+err_t body(void *arg, struct altcp_pcb *conn, struct pbuf *p, err_t err) 
+{
+	char myBuff[1000];
+	
+	printf("\n\nbody\n"); 
+//	pbuf_copy_partial(p, myBuff, p->tot_len, 0); 
+//	printf("%s", myBuff); 
+	return ERR_OK; 
+}
+
+void result(void *arg, httpc_result_t httpc_result, u32_t rx_content_len, u32_t srv_res, err_t err) 
+{ 
+	printf("\n\ntransfer complete\n"); 
+	printf("local result=%d\n", httpc_result); 
+	printf("http result=%d\n", srv_res); 
+}
+
+
+/* END Callbacks */
+
+prim P_cyw43_arch_init() // -- retcode
+{
+	So(1);
+	Push = (stackitem) cyw43_arch_init_with_country(CYW43_COUNTRY_SWEDEN);
+}
+
+prim P_cyw43_arch_deinit() // --
+{
+	cyw43_arch_deinit();
+}
+
+prim P_wifi_connect() // ssid, pass -- retcode
+{
+	int retcode;
+	uint32_t auth = CYW43_AUTH_WPA2_AES_PSK;
+//	uint32_t auth = CYW43_AUTH_WPA2_MIXED_PSK;
+	
+	Sl(2);
+	cyw43_arch_enable_sta_mode(); 
+	cyw43_wifi_pm(&cyw43_state, 0xa11140);
+    retcode = cyw43_arch_wifi_connect_timeout_ms((char*)S1, (char*)S0, auth, 30000);
+	Pop;
+	S0 = (stackitem) retcode;
+} 
+
+prim P_cyw43_arch_poll()
+{
+	cyw43_arch_poll();
+}
+
+prim P_cyw43_tcpip_link_status() // -- status (CYW43_LINK_UP = 3)
+{
+	So(1);
+	Push = (stackitem) cyw43_tcpip_link_status(&cyw43_state,CYW43_ITF_STA);
+}
+
+
+prim P_httpc_get_file() // ip1 ip2 ip3 ip4 port page --
+{
+	Sl(2);
+	IP4_ADDR(&host_ip, 192, 168, 1, 161);
+	settings.result_fn = result;
+	settings.headers_done_fn = headers;
+	err_t err = httpc_get_file( &host_ip, S1, (char*)S0, &settings, body, NULL, NULL );
+//	err_t err = httpc_get_file_dns( (char*)S2, S1, (char*)S0, &settings, body, NULL, NULL );
+//	Pop2;
+//	Pop2;
+	Pop2;
+}
+
+#endif /* PICOW */
 
 prim P_hour_us() // hours minutes -- msb lsb /* 64 bit delay to use as input to sleep_us */
 {
@@ -3660,7 +3763,7 @@ static struct primfcn primt[] = {
     {"0MAXRANDOM", P_maxrandom},
 #endif /* MATH */
 #endif /* REAL */
-
+ 
     {"0(NEST)", P_nest},
     {"0EXIT", P_exit},
     {"0(LIT)", P_dolit},
@@ -3861,6 +3964,14 @@ static struct primfcn primt[] = {
 	{"0QUEUE_PEEK_BLOCKING",P_queue_peek_blocking},
 #endif
 #endif /* PICO */
+#ifdef PICOW
+	{"0ARCH_POLL", P_cyw43_arch_poll},
+	{"0WIFI_INIT", P_cyw43_arch_init},
+	{"0WIFI_DEINIT", P_cyw43_arch_deinit},
+	{"0HTTPC_GET_FILE", P_httpc_get_file},
+	{"0WIFI_CONNECT", P_wifi_connect},
+	{"0TCPIP_LINK_STATUS", P_cyw43_tcpip_link_status},
+#endif /* PICOW */
     {NULL, (codeptr) 0}
 };
 
@@ -4700,6 +4811,7 @@ int main()
 	atl_init();
 #ifdef PICO
 	stdio_init_all();
+
 #ifdef UART
 	// Set up our UART
 	uart_init(UART_ID, BAUD_RATE);
@@ -4718,7 +4830,6 @@ int main()
 	gpio_set_dir(PIN_CS, GPIO_OUT);
 	gpio_put(PIN_CS, 1);
 #endif /* SPI */
-
 #endif /* PICO */
 
 	while (!tud_cdc_connected()) { sleep_ms(100);  }

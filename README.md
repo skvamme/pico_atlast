@@ -303,3 +303,22 @@ QUEUE_REMOVE_BLOCKING
 QUEUE_PEEK_BLOCKING
 	( que data -- )
 
+************** PICOW ****************
+ARCH_POLL
+	( -- )
+
+WIFI_INIT
+	( -- result )
+
+WIFI_DEINIT
+	( -- )
+	
+HTTPC_GET_FILE
+	( int int int int int str -- )
+	e.g. 127 0 0 1 8080 "/index.html" HTTPC_GET_FILE
+
+WIFI_CONNECT
+	( ssid password -- result )
+
+TCPIP_LINK_STATUS
+	( -- result )

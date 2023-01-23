@@ -5,7 +5,7 @@
 16 STRING path
  
 : tempinit adc_init 26 adc_gpio_init 1 adc_set_temp_sensor_enabled
-4 adc_select_input adc_temp fix ;
+4 adc_select_input ;
  
 : wifiinit wifi_init dup if ." "wifiinit error" cr then ;
 

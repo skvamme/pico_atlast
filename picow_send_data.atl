@@ -1,23 +1,23 @@
 ( Send temperature data to a web server, using GET and the data encoded in the PATH )
 ( I'm using the COWBOY web server www.ninenines.eu )
 
-4 STRING value
-16 STRING path
+64 STRING value
+64 STRING path
  
 : tempinit adc_init 26 adc_gpio_init 1 adc_set_temp_sensor_enabled
-4 adc_select_input adc_temp fix ;
+4 adc_select_input ;
  
-: wifiinit wifi_init dup if ." "wifiinit error" cr then ;
+: wifiinit wifi_init if ." "wifiinit error" cr then ;
 
 : connect "yourssid" "yourpassword" wifi_connect . tcpip_link_status . ;
 
-: celciusstr adc_temp fix "%ld" value strform ;
+: celciusstr "" value strcpy adc_temp fix "%ld" value strform ;
 
-: pathstr "/temp/" path strcpy ;
+: pathstr "" path strcpy "/?degrees=" path strcpy value path strcat ;
 
-: get 192 168 1 161 8080 value path strcat httpc_get_file ;
+: get 192 168 1 161 8080 path httpc_get_file ;
 
-: init tempinit wifiinit connect cr pathstr ;
+: init tempinit wifiinit connect cr celciusstr pathstr ;
 
-: go init begin celciusstr get cr kbhit? if exit then again ;
+: go init begin celciusstr get cr kbhit? if exit then 1000 sleep_ms again ;
 

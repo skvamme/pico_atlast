@@ -19,5 +19,5 @@
 
 : init tempinit wifiinit connect cr celciusstr pathstr ;
 
-: go init begin celciusstr get cr kbhit? if exit then 1000 sleep_ms again ;
+: go init begin celciusstr pathstr get cr kbhit? if exit then 1000 sleep_ms again ;
 

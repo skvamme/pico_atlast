@@ -1,5 +1,5 @@
 ( Send temperature data to a web server, using GET and the data encoded in the PATH )
-( I'm using the COWBOY web server www.ninenines.eu )
+( I'm using the COWBOY web server www.ninenines.eu The call is: 192.168.1.161:8080/?degrees=22 )
 
 64 STRING value
 64 STRING path

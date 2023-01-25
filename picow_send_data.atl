@@ -12,9 +12,9 @@
 
 : connect "yourssid" "yourpassword" wifi_connect . tcpip_link_status . ;
 
-: celciusstr "" value strcpy adc_temp fix "%ld" value strform ;
+: celciusstr adc_temp fix "%ld" value strform ;
 
-: pathstr "" path strcpy "/?degrees=" path strcpy value path strcat ;
+: pathstr "/?degrees=" path strcpy value path strcat ;
 
 : get 192 168 1 161 8080 path httpc_get_file ;
 

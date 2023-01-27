@@ -142,7 +142,9 @@ QUEUE_REMOVE_BLOCKING ( que data -- )
 
 QUEUE_PEEK_BLOCKING ( que data -- )
 
-************** PICOW **************** ARCH_POLL ( -- )
+************** PICOW **************** All the above plus:
+
+ARCH_POLL ( -- )
 
 WIFI_INIT ( -- result )
 

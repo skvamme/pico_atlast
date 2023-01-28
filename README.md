@@ -5,6 +5,8 @@ ATLAST Forth for Raspberry Pi Pico is a C application with a built in forth scri
 
 <B>Latest commit:</b> [PICOW] Added an example how to get a file from a web server. get_from_server.atl The result from the GET is in a string variable BODY that you can TYPE or, if it is forth source code, EVALUATE to compile.
 
+Added an example how to push data to a web sever picow_send_data.atl using GET and data encoded in the path.
+
 <B>Previous commit:</b> Added support for PICOW. PICOW words are ARCH_POLL, WIFI_INIT, WIFI_DEINIT, HTTPC_GET_FILE, WIFI_CONNECT, TCPIP_LINK_STATUS.
 
 <b>Previous commit:</b> Use FORTH blocks to store source code and data in FLASH. New words are LIST, LOAD, BLOCK, EMPTYBUFFER, SAVEBUFFER. See atlast.html. Try 63 0 LIST and you will get a text result from Factory Production Test. 

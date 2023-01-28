@@ -11,7 +11,7 @@ Added an example how to push data to a web sever picow_send_data.atl using GET a
 
 <b>Previous commit:</b> Use FORTH blocks to store source code and data in FLASH. New words are LIST, LOAD, BLOCK, EMPTYBUFFER, SAVEBUFFER. See atlast.html. Try 63 0 LIST and you will get a text result from Factory Production Test. 
 
-ATLAST Forth is now running in RAM to make erasing and writing to flash possible. On picow you have to comment out #define PICOW on line 63 in atlast.c and take away comment out on #Run in ram (two lines below) in file CMakeLists.txt Then you can reverse the changes and the saved block is there for LIST and LOAD
+ATLAST Forth is now running in RAM to make erasing and writing to flash possible. On picow you have to comment out #define PICOW on line 63 in atlast.c and take away comment out on #Run in ram (two lines below) in file CMakeLists.txt Compile and then you can reverse the changes and the saved block is there for LIST and LOAD
 
 To store something in a flash block, write it in a file. Max line width 130 characters. Run the shell script atl2blk.sh yourfilename.whatever The result is a file blk.atl Connect to your pico, and in cu type ~ (wait for a prompt) type > (enter) and type the name of the file to import BLK.ATL. Result is each file line as a separate string on the stack. Copy paste the text in the file blockzero.atl and run the word STACKSTRINGS It will put all the strings on the stack into one string buffer. Type 64 EMPTYBUFFER and BUFFER 64 SAVEBUFFER (64 is just an example, there is more than 400 blocks to use). Now you can type 64 0 list or 64 load if it was forth code. Any code that you put in block 0 will autorun when the pico is started.
 

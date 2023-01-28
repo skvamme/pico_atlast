@@ -3,8 +3,9 @@ ATLAST Forth for Raspberry Pi Pico is a C application with a built in forth scri
 
 <b>Documentation:</b> http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf Charles Moore, the inventor of forth gave an interview here http://www.ultratechnology.com/1xforth.htm and a presentation here https://www.youtube.com/watch?v=0PclgBd6_Zs Here is a nice tutorial from Shropshire LUG - Oct 2020 https://www.youtube.com/watch?v=EADDOnRtFrI Read the PICO documentation for the C/C++ API for a detailed description of each function. https://datasheets.raspberrypi.com/pico/raspberry-pi-pico-c-sdk.pdf
 
+<B>Latest commit:</b> Added an example how to get a file from a web server. get_from_server.atl The result from the GET is in a string variable BODY that you can TYPE or, if it is forth source code, EVALUATE to compile.
 
-<B>Latest commit:</b> Added support for PICOW. Cannot run in RAM so you are not able to write blocks in flash. Reading and running is ok. PICOW words are ARCH_POLL, WIFI_INIT, WIFI_DEINIT, HTTPC_GET_FILE, WIFI_CONNECT, TCPIP_LINK_STATUS.
+<B>Previous commit:</b> Added support for PICOW. Cannot run in RAM so you are not able to write blocks in flash. Reading and running is ok. PICOW words are ARCH_POLL, WIFI_INIT, WIFI_DEINIT, HTTPC_GET_FILE, WIFI_CONNECT, TCPIP_LINK_STATUS.
 
 <b>Previous commit:</b> Use FORTH blocks to store source code and data in FLASH. New words are LIST, LOAD, BLOCK, EMPTYBUFFER, SAVEBUFFER. See atlast.html. Try 63 0 LIST and you will get a text result from Factory Production Test. 
 

@@ -1,6 +1,5 @@
 ( Send temperature data to a web server, using GET and the data encoded in the PATH )
-( I'm using the COWBOY web server www.ninenines.eu The GET call is: 192.168.1.161:8080/?degrees=22 )
-( type GO )
+( I'm using the COWBOY web server www.ninenines.eu )
 
 64 STRING value
 64 STRING path
@@ -8,9 +7,10 @@
 : tempinit adc_init 26 adc_gpio_init 1 adc_set_temp_sensor_enabled
 4 adc_select_input ;
  
-: wifiinit wifi_init if ." "wifiinit error" cr then ;
+: connect "test2" "DETFMAJHD" wifi_connect drop ;
 
-: connect "yourssid" "yourpassword" wifi_connect . tcpip_link_status . ;
+: connretry begin cr kbhit? if exit then connect tcpip_link_status 
+	dup . 1000 sleep_ms  3 = until ;
 
 : celciusstr adc_temp fix "%ld" value strform ;
 
@@ -18,7 +18,11 @@
 
 : get 192 168 1 161 8080 path httpc_get_file ;
 
-: init tempinit wifiinit connect ;
+: strings celciusstr pathstr ;
 
-: go init begin celciusstr pathstr get cr kbhit? if exit then 1000 sleep_ms again ;
+: go tempinit connretry begin strings get kbhit? if exit then 1000 sleep_ms again ;
 
+( Call the words, in this order. You can exit the loop by pressing any key, start again with go )
+( Calling wifi_init twice is a no no )
+wifi_init
+go

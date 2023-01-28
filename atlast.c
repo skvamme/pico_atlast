@@ -53,7 +53,7 @@
 #define ARRAY			      /* Array subscripting words */
 //#define BREAK			      /* Asynchronous break facility */
 #define Keyhit		      /* Stop and start wordlisting */
-//#define COMPILERW		      /* Compiler-writing words */
+#define COMPILERW		      /* Compiler-writing words */
 #define CONIO			      /* Interactive console I/O */
 #define DEFFIELDS		      /* Definition field access for words */
 #define DOUBLE                     /* Double word primitives (2DUP) */
@@ -74,7 +74,7 @@
 #define ALIGNMENT
 #define EXPORT
 //#define READONLYSTRINGS
-//#define TRACE			      /* Execution tracing */
+#define TRACE			      /* Execution tracing */
 #define WALKBACK		      /* Walkback trace */
 //#define WORDSUSED             /* Logging of words used and unused */
 #define HIGHC	                      /* Don't use SIGINT */
@@ -352,7 +352,7 @@ static char *alloc(size)
 {
     char *cp = malloc(size);
 
-V fprintf(stderr,"\nAlloc %u", size);
+// V fprintf(stderr,"\nAlloc %u", size);
     if (cp == NULL) {
         V fprintf(stderr,"\n\nOut of memory!  %u bytes requested.\n", size);
 	abort();
@@ -2981,36 +2981,21 @@ prim P_fwdresolve()		      /* Emit forward jump offset */
 
 /* Callback functions */
 
-err_t headers(httpc_state_t *connection, void *arg, struct pbuf *hdr, u16_t hdr_len, u32_t content_len) 
-{ 
-	char myBuff[1000];
-	
-	printf("headers recieved\n"); 
-	printf("content length=%d\n", content_len); 
-	printf("header length %d\n", hdr_len); 
-//	pbuf_copy_partial(hdr, myBuff, hdr->tot_len, 0); 
-//	printf("\n\nheaders\n"); 
-//	printf("%s", myBuff); 
-	return ERR_OK; 
-}
-
 err_t body(void *arg, struct altcp_pcb *conn, struct pbuf *p, err_t err) 
 {
-	char myBuff[1000];
+    dictword *dw;
 	
-	printf("\n\nbody\n"); 
-//	pbuf_copy_partial(p, myBuff, p->tot_len, 0); 
-//	printf("%s", myBuff); 
+	dw = atl_vardef("body",p->tot_len);
+	
+	if (dw == NULL) {
+		V printf("Cannot allocate the string variable 'BODY'\n");
+	} else {
+		pbuf_copy_partial(p, atl_body(dw), p->tot_len, 0); 
+//		V printf("body ready\n"); 
+	}
+	pbuf_free(p);
 	return ERR_OK; 
 }
-
-void result(void *arg, httpc_result_t httpc_result, u32_t rx_content_len, u32_t srv_res, err_t err) 
-{ 
-	printf("\n\ntransfer complete\n"); 
-	printf("local result=%d\n", httpc_result); 
-	printf("http result=%d\n", srv_res); 
-}
-
 
 /* END Callbacks */
 
@@ -3030,7 +3015,6 @@ prim P_wifi_connect() // ssid, pass -- retcode
 	int retcode;
 	uint32_t auth = CYW43_AUTH_WPA2_AES_PSK;
 //	uint32_t auth = CYW43_AUTH_WPA2_MIXED_PSK;
-	
 	Sl(2);
 	cyw43_arch_enable_sta_mode(); 
 	cyw43_wifi_pm(&cyw43_state, 0xa11140);
@@ -3051,16 +3035,15 @@ prim P_cyw43_tcpip_link_status() // -- status (CYW43_LINK_UP = 3)
 }
 
 
-prim P_httpc_get_file() // ip1 ip2 ip3 ip4 port page --
+prim P_httpc_get_file() // ip1 ip2 ip3 ip4 port page -- 
 {
-	Sl(2);
-	IP4_ADDR(&host_ip, 192, 168, 1, 161);
-	settings.result_fn = result;
-	settings.headers_done_fn = headers;
+	Sl(6);
+	IP4_ADDR(&host_ip, S5, S4, S3, S2);
+	cyw43_arch_lwip_begin();
 	err_t err = httpc_get_file( &host_ip, S1, (char*)S0, &settings, body, NULL, NULL );
-//	err_t err = httpc_get_file_dns( (char*)S2, S1, (char*)S0, &settings, body, NULL, NULL );
-//	Pop2;
-//	Pop2;
+	cyw43_arch_lwip_end();
+	Pop2;
+	Pop2;
 	Pop2;
 }
 
@@ -4811,7 +4794,9 @@ int main()
 	atl_init();
 #ifdef PICO
 	stdio_init_all();
+	
 
+	
 #ifdef UART
 	// Set up our UART
 	uart_init(UART_ID, BAUD_RATE);

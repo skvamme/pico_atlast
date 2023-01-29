@@ -1,6 +1,6 @@
 ( Send temperature data to a web server, using GET and the data encoded in the PATH )
 ( I'm using the COWBOY web server www.ninenines.eu )
-
+( Call wifi_init only once )
 64 STRING value
 64 STRING path
  
@@ -23,6 +23,6 @@
 : go tempinit connretry begin strings get kbhit? if exit then 1000 sleep_ms again ;
 
 ( Call the words, in this order. You can exit the loop by pressing any key, start again with go )
-( Calling wifi_init twice is a no no )
+
 wifi_init
 go

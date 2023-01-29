@@ -5,7 +5,7 @@ ATLAST Forth for Raspberry Pi Pico is a C application with a built in forth scri
 
 <B>Latest commit:</b> [PICOW] Added an example how to get a file from a web server. get_from_server.atl The result from the GET is in a string variable BODY that you can TYPE or, if it is forth source code, EVALUATE to compile.
 
-The input buffer is a round robin. If the end of the file overwrites the begining, the file is to big.
+The input buffer is a round robin. If the end of the file overwrites the begining, the file is too big.
 
 Added an example how to push data to a web sever picow_send_data.atl using GET and data encoded in the path.
 

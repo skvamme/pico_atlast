@@ -1,5 +1,5 @@
 ( GET file from a webserver )
-
+( Call wifi_init only once )
 64 STRING path
  
 : connect "yourssid" "yourpasswd" wifi_connect drop ;

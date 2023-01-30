@@ -40,7 +40,7 @@ cd pico_atlast
 mv CMakeLists.txt CMakeLists.original
 cp *.* ~/pico/atlast
 </pre>
-
+ 
 Go to ~/pico/atlast and open the file CMakeLists.txt and add a line to the list of User requested libraries down at the end of the file. Put it right after hardware_spi. These two are actually needed, comment out the other ones if you like.
 Add a line to run ATLAST in RAM. 
 Add a last line to the file, make the C-function malloc return 0 if out of memory for the forth word memstat to work.

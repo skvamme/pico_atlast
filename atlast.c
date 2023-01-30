@@ -69,7 +69,7 @@
 #define SHORTCUTC		      /* Shortcut integer comparison */
 #define STRING                      /* String functions */
 #define SYSTEM                     /* System command function */
-#define NOMEMCHECK
+//#define NOMEMCHECK
 #ifndef NOMEMCHECK
 #define MEMSTAT
 #define ALIGNMENT

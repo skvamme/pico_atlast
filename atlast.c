@@ -69,6 +69,7 @@
 #define SHORTCUTC		      /* Shortcut integer comparison */
 #define STRING                      /* String functions */
 #define SYSTEM                     /* System command function */
+#define NOMEMCHECK
 #ifndef NOMEMCHECK
 #define MEMSTAT
 #define ALIGNMENT
@@ -95,6 +96,7 @@
 #include "pico/bootrom.h"
 #include "hardware/spi.h"
 #include "hardware/adc.h"
+#include "hardware/sync.h"
 #include "hardware/flash.h"
 #include <tusb.h>
 #define L 131
@@ -2803,7 +2805,7 @@ prim P_list() /* n n -- */
 	const uint8_t *flash_target_contents = (const uint8_t *) 
 		(XIP_BASE + FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE * S1));
 	if(S0 == 1)
-		print_buf(flash_target_contents, FLASH_SECTOR_SIZE); // FLASH_PAGE_SIZE = 256 byte
+		print_buf(flash_target_contents, FLASH_SECTOR_SIZE); 
 	else
 		V printf("%s\n", flash_target_contents);
 	Pop;
@@ -2813,11 +2815,9 @@ prim P_list() /* n n -- */
 prim P_load() /* n -- */
 {
     Sl(1);
-	uint8_t random_data[FLASH_PAGE_SIZE];
 	
 	const uint8_t *flash_target_contents = (const uint8_t *) 
 		(XIP_BASE + FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE *  S0));
-//	V strcpy(flash_target_contents, random_data);
 	V atl_eval(flash_target_contents);
 	Pop;
 }
@@ -2825,24 +2825,26 @@ prim P_load() /* n -- */
 prim P_block() /* n -- addr */
 {
     Sl(1);
-
-	S0 = (stackitem) XIP_BASE + FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE * S0);
+	
+	S0 = (stackitem) XIP_BASE + FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE *  S0);
 }
 
 prim P_emptybuffer()  /* n -- */
 {
     Sl(1);
-
+	uint32_t ints = save_and_disable_interrupts();
     flash_range_erase(FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE * S0), FLASH_SECTOR_SIZE);
+	restore_interrupts(ints);
 	Pop;
 }
 
 prim P_savebuffer()  /* str n -- */
 {
     Sl(2); /* string to save, buffer n */
-	
+	uint32_t ints = save_and_disable_interrupts();	
 	flash_range_program(FLASH_TARGET_OFFSET + (FLASH_SECTOR_SIZE * S0), ( const uint8_t*) S1, 
 		FLASH_SECTOR_SIZE);
+	restore_interrupts(ints);
 	Pop;
 	Pop;
 }
@@ -4768,13 +4770,14 @@ V printf(" Forgetting DOES> word. ");
 	       (registered with the call on signal() in main()),
 	       just turn this code off or, better still, replace it
 	       with the equivalent on your system.  */
-
+/*
 static void ctrlc(sig)
   int sig;
 {
     if (sig == SIGINT)
 	atl_break();
 }
+*/
 #endif /* HIGHC */
 int main()
 {
@@ -4820,7 +4823,7 @@ int main()
 	while (!tud_cdc_connected()) { sleep_ms(100);  }
 	V printf("tud_cdc_connected()\n");
 	V printf("ATLAST 1.2 (2007-10-07) This program is in the public domain.\n");
-    V atl_eval("0 LOAD");
+    V atl_eval("50 LOAD");
 	while (TRUE) {
 		V printf(atl_comment ? "(  " :  /* Show pending comment */
 		(((heap != NULL) && state) ? ":> " : "$> ")); /* Show compiling state */

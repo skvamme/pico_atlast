@@ -1,0 +1,9 @@
+( Add a string to a block )
+( define #NOMEMCHECK in atlast c line 71, above #ifndef NOMEMCHECK )
+65 block strlen \ The block you want to add to
+STRING buffer 
+65 block buffer strcpy
+" wifi_init go " buffer strcat \ The string you want to add to the block
+65 emptybuffer
+buffer 65 savebuffer cr
+

@@ -4,9 +4,5 @@
 
 : STACKSTRINGS "" buffer strcpy depth 0 do depth 1 - roll buffer strcat "\n" buffer strcat loop ;
 
-: GO ." "Block 0 loaded" cr ;
-
-GO
-
 
 

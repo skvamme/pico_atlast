@@ -58,18 +58,18 @@
 #define DEFFIELDS		      /* Definition field access for words */
 #define DOUBLE                     /* Double word primitives (2DUP) */
 #define EVALUATE		      /* The EVALUATE primitive */
-#define FILEIO			      /* File I/O primitives */
+//#define FILEIO			      /* File I/O primitives */
 #define PICO                          /* Raspberry Pi PICO functions */
 #define PICOW					/* Raspberry Pi PICO W functions, PICO must also be defined */
 #define MATH			      /* Math functions */
-#define MEMMESSAGE           /* Print message for stack/heap errors */
+#define MEMMESSAGE      /* Enable USB console. Print message for stack/heap errors */
 //#define PROLOGUE		      /* Prologue processing and auto-init */
 #define REAL			      /* Floating point numbers */
 #define SHORTCUTA		      /* Shortcut integer arithmetic words */
 #define SHORTCUTC		      /* Shortcut integer comparison */
 #define STRING                      /* String functions */
 #define SYSTEM                     /* System command function */
-#define NOMEMCHECK
+//#define NOMEMCHECK
 #ifndef NOMEMCHECK
 #define MEMSTAT
 #define ALIGNMENT
@@ -4819,15 +4819,16 @@ int main()
 	gpio_put(PIN_CS, 1);
 #endif /* SPI */
 #endif /* PICO */
-
+#ifdef MEMMESSAGE
 	while (!tud_cdc_connected()) { sleep_ms(100);  }
 	V printf("tud_cdc_connected()\n");
 	V printf("ATLAST 1.2 (2007-10-07) This program is in the public domain.\n");
+#endif /* MEMMESSAGE */	
     V atl_eval("50 LOAD");
 	while (TRUE) {
 		V printf(atl_comment ? "(  " :  /* Show pending comment */
 		(((heap != NULL) && state) ? ":> " : "$> ")); /* Show compiling state */
 			V atl_eval(readLine());
-	}    
+	} 
 	return 0;
 }

@@ -4823,8 +4823,10 @@ int main()
 	while (!tud_cdc_connected()) { sleep_ms(100);  }
 	V printf("tud_cdc_connected()\n");
 	V printf("ATLAST 1.2 (2007-10-07) This program is in the public domain.\n");
-#endif /* MEMMESSAGE */	
+#endif /* MEMMESSAGE */
+#ifndef MEMMESSAGE
     V atl_eval("50 LOAD");
+#endif
 	while (TRUE) {
 		V printf(atl_comment ? "(  " :  /* Show pending comment */
 		(((heap != NULL) && state) ? ":> " : "$> ")); /* Show compiling state */

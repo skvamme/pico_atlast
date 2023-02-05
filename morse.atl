@@ -1,4 +1,5 @@
-( Blink morse code temp Celsius 0 - 28 deg ) 
+( Blink morse code temp Celsius 0 - 28 deg )
+( Not for Pico W )
 : sp 100 sleep_ms ; 
 : dot 25 1 gpio_put sp 25 0 gpio_put sp ; 
 : dash 25 1 gpio_put sp sp sp 25 0 gpio_put sp ; 

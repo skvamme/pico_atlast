@@ -1,9 +1,9 @@
 ( Takes values from the ttp229 capacitive keypad )
 ( To enable all 16 keys, solder a jumper on keypad P1, 3rd pair. Otherwise, 8 keys are active )
-( To enable multi key press, put a jumper on keypad P1, 4th pair. Otherwise, single key only )
-( I am using gpio 4 for SDO output from the kypad and 17 for SCL input.  )
+( To enable multi key press, put a jumper on keypad P1, 4th pair and 5th pair. Otherwise, single key only )
+( I am using gpio 4 for SDO output from the kypad and 5 for SCL input. Any gpio will do. )
 
-17 constant SCL
+5 constant SCL
 4 constant SDO
 
 : setup SCL gpio_init SCL 1 gpio_set_dir SDO gpio_init SDO 0 gpio_set_dir SCL 1 gpio_put ;

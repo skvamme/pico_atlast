@@ -10,4 +10,4 @@
 
 : read16 16 0 do SCL 0 gpio_put 1 sleep_ms SDO gpio_get . i 1+ . cr SCL 1 gpio_put 1 sleep_ms loop ;
 
-: go begin read16 1 longsleep kbhit? if exit then again ;
+: go setup begin read16 1 longsleep kbhit? if exit then again ;

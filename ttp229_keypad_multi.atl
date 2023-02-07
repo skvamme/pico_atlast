@@ -1,0 +1,20 @@
+( Takes values from the ttp229 capacitive keypad and store as an integer. Press 4 and 2: SUM is 10 )
+( To enable all 16 keys, solder a jumper on keypad P1, 3rd pair. Otherwise, 8 keys are active )
+( To enable multi key press, put a jumper on keypad P1, 4th pair and 5th pair. Otherwise, single key only )
+( I am using gpio 4 for SDO output from the keypad and 5 for SCL input.  Any gpio will do. )
+
+5 constant SCL
+4 constant SDO
+variable SUM
+
+( Setting gpio 14 and 15 as input so that I can mount the keypad directly on the breadboard )
+: setup SCL gpio_init SCL 1 gpio_set_dir SDO gpio_init SDO 0 gpio_set_dir
+	14 gpio_init 14 0 gpio_set_dir 15 gpio_init 15 0 gpio_set_dir SCL 1 gpio_put ;
+	
+( I am not reading key 15 and 16. Those keys are broken on my keypad )
+: read16 clear 16 0 do SCL 0 gpio_put 0 500 sleep_us SCL 1 gpio_put SDO gpio_get 0 500 sleep_us loop ;
+
+( The result from every scan is saved in the SUM variable. Each pressed key represents a bit position in a 16 bit word )
+: go setup begin 0 SUM ! read16 15 1 do depth 1 - roll 0= if 1 i 1- shift SUM @ + SUM ! then loop 
+	100 sleep_ms kbhit? if exit then SUM @ . cr again ;
+	

@@ -13,7 +13,7 @@ variable SUM
 
 ( The result from every scan is saved in the SUM variable. Each pressed key represents a bit position in a 16 bit word )
 : read16 0 SUM ! 16 0 do SCL 0 gpio_put 0 500 sleep_us SCL 1 gpio_put SDO gpio_get 
-	0= if 1 i 1- shift SUM @ + SUM ! then 0 500 sleep_us loop ;
+	0= if 1 i shift SUM @ + SUM ! then 0 500 sleep_us loop ;
 
 : go setup begin read16 100 sleep_ms kbhit? if exit then SUM @ . cr again ;
 	

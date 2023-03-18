@@ -131,9 +131,9 @@ unsigned char *readLine() {
 #define GPIO
 #define SPI
 #define ADC
-//#define MULTICORE
+#define MULTICORE
 #define WATCHDOG
-//#define QUEUE
+#define QUEUE
 
 
 #ifdef MULTICORE
@@ -3050,6 +3050,10 @@ prim P_httpc_get_file() // ip1 ip2 ip3 ip4 port page --
 }
 
 #endif /* PICOW */
+prim P_kbd_scan()
+{
+	
+}
 
 prim P_hour_us() // hours minutes -- msb lsb /* 64 bit delay to use as input to sleep_us */
 {
@@ -3152,7 +3156,88 @@ prim P_add_alarm_in_us() // ( msb lsb fire_if_past name -- result )  /* result i
 	S0 = result;
 }
 
+prim P_neopixel() // 32bit int (G R B W) -- 
+// Bit-banging neopixel serial protocoll.
+{
+	Sl(1);
+	int pin=4;
+	bool pixarray[32];
 
+	for(int i = 0; i < 32; i++, S0 >>=1)  {
+		pixarray[i] = S0 & 1;
+//		V printf("%d ", pixarray[i]);
+	}
+	
+	for(int i = 31; i >=0; i--)  {
+	if ( pixarray[i] ) {
+		gpio_put(pin, 1);
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+	// (0.6 uS)
+			gpio_put(pin, 0);
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		// (0.6 uS) 
+} else {
+		gpio_put(pin, 1);
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		// (0.3 uS) 
+		gpio_put(pin, 0);
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n");
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		__asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); __asm volatile ("nop\n"); 
+		// (0.9 uS) 
+	}	}
+	Pop;
+}
 
 /* GPIO ****************************************** */
 #ifdef GPIO
@@ -3165,7 +3250,7 @@ prim P_gpio_set_irq_enabled_with_callback() // gpiopin events bool word --
 	Pop2;
 }
 
-// GPIO_FUNC_XIP = 0, GPIO_FUNC_SPI = 1, GPIO_FUNC_UART = 2, 
+//GPIO_FUNC_XIP = 0, GPIO_FUNC_SPI = 1, GPIO_FUNC_UART = 2, 
 //GPIO_FUNC_I2C = 3, GPIO_FUNC_PWM = 4,GPIO_FUNC_SIO = 5, 
 //GPIO_FUNC_PIO0 = 6, GPIO_FUNC_PIO1 = 7, GPIO_FUNC_GPCK = 8, 
 //GPIO_FUNC_USB = 9, GPIO_FUNC_NULL =0xf }
@@ -3449,9 +3534,14 @@ int32_t adc_temp_core1()
 #ifdef MULTICORE
 /* MULTICORE ******************************************* */
 
+prim P_multicore_reset_core1()
+{
+	V multicore_reset_core1();
+}
+
 prim P_multicore_launch_core1() //  --  
 {
-    multicore_launch_core1(core1_entry);
+ //   multicore_launch_core1(core1_entry);
 // V printf("After launch_core1\n");
 }
 
@@ -3878,7 +3968,7 @@ static struct primfcn primt[] = {
 #endif /* EVALUATE */
 	
 #ifdef PICO
-        {"0SLEEP_MS", P_sleep_ms},
+	{"0SLEEP_MS", P_sleep_ms},
 	{"0SLEEP_US", P_sleep_us},
 	{"0TIME_US", P_time_us},
 	{"0HOUR_US", P_hour_us},
@@ -3896,6 +3986,7 @@ static struct primfcn primt[] = {
 	{"0GPIO_SET_FUNCTION", P_gpio_set_function},
 	{"0GPIO_SET_IRQ_ENABLED_WITH_CALLBACK", P_gpio_set_irq_enabled_with_callback},
 	{"0GPIO_SET_PULLS", P_gpio_set_function},
+	{"0NEOPIXEL", P_neopixel},
 #ifdef SPI
 	{"0SPI_DEINIT", P_spi_deinit},
 	{"0SPI_INIT", P_spi_init},
@@ -3925,6 +4016,7 @@ static struct primfcn primt[] = {
 	{"0ADC_CONVERSION_FACTOR", P_adc_conversion_factor},
 #endif
 #ifdef MULTICORE
+	{"0MULTICORE_RESET_CORE1", P_multicore_reset_core1},
 	{"0MULTICORE_LAUNCH_CORE1",P_multicore_launch_core1},
 	{"0MULTICORE_FIFO_POP_BLOCKING",P_multicore_fifo_pop_blocking},
 	{"0MULTICORE_FIFO_PUSH_BLOCKING",P_multicore_fifo_push_blocking},

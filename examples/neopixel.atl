@@ -1,0 +1,20 @@
+( neopixel.atl )
+( Can drive an SK6812RGBW type of neopixel. )
+( The SK6812 klock input is a 5 volt logic vs the pico output of 3.3 volt. It works, but not reliable. )
+( DC-DC converter recommended. )
+
+: on 4294967295 neopixel ; 
+: off 0 neopixel ; 
+: green 4278190080 neopixel ;
+: red 16711680 neopixel ;
+: blue 65280 neopixel ;
+: white 255 neopixel ;
+
+( Hardcoded use of GPIO 4, change in atlast.c )
+: setup 4 gpio_init 4 1 gpio_set_dir ;
+
+( COMPOSE makes a 32 bit int from four 8 bit ints )
+( R G B W -- int )
+: compose swap 3 roll 3 roll 8 shift + 8 shift + 8 shift + ;
+
+: go setup 255 0 0 0 compose neopixel ;

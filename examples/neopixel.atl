@@ -3,9 +3,11 @@
 ( The SK6812 klock input is a 5 volt logic vs the pico output of 3.3 volt. It works, but not reliable. )
 ( DC-DC converter recommended. )
 
+( Type GO and the red LED will come on. If you have a neopixel led strip, try GOSTRIP )
+
 : on 4294967295 neopixel ; 
 : off 0 neopixel ; 
-: green 4278190080 neopixel ;
+: green 4278190080 neopixel ; 
 : red 16711680 neopixel ;
 : blue 65280 neopixel ;
 : white 255 neopixel ;
@@ -17,4 +19,11 @@
 ( R G B W -- int )
 : compose swap 3 roll 3 roll 8 shift + 8 shift + 8 shift + ;
 
+( -- )
 : go setup 255 0 0 0 compose neopixel ;
+
+( Number of leds -- )
+: gostrip 1 do red loop ;
+
+( n -- )
+: offstrip 1 do off loop ;

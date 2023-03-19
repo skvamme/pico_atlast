@@ -3,27 +3,45 @@
 ( The SK6812 klock input is a 5 volt logic vs the pico output of 3.3 volt. It works, but not reliable. )
 ( DC-DC converter recommended. )
 
-( Type GO and the red LED will come on. If you have a neopixel led strip, try GOSTRIP )
+( Type SETUP and then RED and the red LED will come on. If you have a neopixel led strip, try GOSTRIP )
 
-: on 4294967295 neopixel ; 
-: off 0 neopixel ; 
-: green 4278190080 neopixel ; 
-: red 16711680 neopixel ;
-: blue 65280 neopixel ;
-: white 255 neopixel ;
-
-( Hardcoded use of GPIO 4, change in atlast.c )
+( Initialize gpio pin 4 and set direction to output )
+( Hardcoded use of GPIO 4, change in atlast.c if you want another pin. )
 : setup 4 gpio_init 4 1 gpio_set_dir ;
 
 ( COMPOSE makes a 32 bit int from four 8 bit ints )
+( R, G, B and W can be 0 to 255 )
 ( R G B W -- int )
 : compose swap 3 roll 3 roll 8 shift + 8 shift + 8 shift + ;
 
-( -- )
-: go setup 255 0 0 0 compose neopixel ;
+: on 255 255 255 255 compose neopixel ; 
+: off 0 neopixel ; 
+: red 255 0 0 0 compose neopixel ;
+: green 0 255 0 0 compose neopixel ; 
+: blue 0 0 255 0 compose neopixel ;
+: white 0 0 0 255 compose neopixel ;
 
-( Number of leds -- )
+
+( Turn on n number of red pixels )
+( n -- )
 : gostrip 1 do red loop ;
 
+
+( Turn off n number of pixels )
 ( n -- )
 : offstrip 1 do off loop ;
+
+
+( Running strip with 72 pixels, a round robin style. Type ROUNDROBIN to start. Press any key to stop )
+
+( Put 72 integers on the stack. Here I am using a red integer, use the word COMPOSE to create any color )
+: 72pixels 16711680 16711680 16711680 16711680 16711680 16711680 16711680 16711680 16711680 16711680 
+16711680 16711680 16711680 16711680 16711680 16711680 16711680 16711680 16711680 16711680
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 ;  
+
+: first 71 0 do dup neopixel 71 roll loop ;
+
+: all begin first kbhit? if exit then 1 sleep_ms again ;
+
+: roundrobin setup clear 72pixels all ;

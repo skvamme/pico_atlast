@@ -9,6 +9,8 @@ Here is a nice tutorial from Shropshire LUG - Oct 2020 https://www.youtube.com/w
 
 J.V Noble wrote this https://galileo.phys.virginia.edu/classes/551.jvn.fall01/primer.htm and this http://galileo.phys.virginia.edu/classes/551.jvn.fall01/Fth_rev1.pdf
 
+And here is more Forth web sites https://www.forth.com/resources/forth-web-sites/
+
 <B> Latest Commit:</b> Support for Neopixel LED and LEDstrips.
 
 <B>Previous commit:</b> Run headless by commenting-out #MEMMESSAGE in atlast.c line 65. Code in BLOCK 50 is autoloaded and run.

@@ -3,7 +3,7 @@ ATLAST Forth for Raspberry Pi Pico is a C application with a built in forth scri
 
 <b>Documentation:</b> http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf
 
-Charles Moore, the inventor of forth gave an interview here http://www.ultratechnology.com/1xforth.htm and a presentation here https://www.youtube.com/watch?v=0PclgBd6_Zs 
+Charles Moore, the inventor of forth, gave an interview here http://www.ultratechnology.com/1xforth.htm and a presentation here https://www.youtube.com/watch?v=0PclgBd6_Zs 
 
 Here is a nice tutorial from Shropshire LUG - Oct 2020 https://www.youtube.com/watch?v=EADDOnRtFrI 
 

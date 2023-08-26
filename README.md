@@ -1,7 +1,7 @@
 # pico_atlast
 ATLAST Forth for Raspberry Pi Pico is a C application with a built in forth scripting environment. Compiles out of the box, no C-programming knowledge required to use the ATLAST forth console. Get full access to the Raspberry Pi Pico C API in atlast.c and use forth as a quick yet powerful scripting engine. 
 
-<b>Documentation:</b> http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and https://www.dnd.utwente.nl/~tim/colorforth/Leo-Brodie/thinking-forth.pdf There is also a second edition at https://thinking-forth.sourceforge.net/thinking-forth-ans.pdf
+<b>Documentation:</b> http://www.fourmilab.ch/atlast/ and https://www.forth.com/starting-forth/ and [thinking forth](https://thinking-forth.sourceforge.net) There is also a second edition at https://thinking-forth.sourceforge.net/thinking-forth-ans.pdf
 
 Charles Moore, the inventor of forth, gave an interview here http://www.ultratechnology.com/1xforth.htm and a presentation here https://www.youtube.com/watch?v=0PclgBd6_Zs 
 

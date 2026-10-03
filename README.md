@@ -29,7 +29,7 @@ Added an example how to push data to a web sever picow_send_data.atl using GET a
 
 <b>Note:</b> If you want to read from memory outside the HEAP, define #NOMEMCHECK at line 72 of atlast c. It will also give a considerable speed improvment. But beware, you can read and write everywhere.
 
-<b>Installation:</b> Here is one way to install this on a raspberry pi (Verified on a pi 4). If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
+<b>Installation:</b> Here is one way to install this on a raspberry pi (Verified on a pi 4 and 5). If you are on another computer, here is a HOWTO https://datasheets.raspberrypi.com/pico/getting-started-with-pico.pdf
 
 Download the shellscript pico_setup.sh and make it executable. Run it from your home directory.
 <pre>wget https://raw.githubusercontent.com/raspberrypi/pico-setup/master/pico_setup.sh

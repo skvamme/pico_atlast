@@ -1,3 +1,4 @@
+( Draw sixel graphics in a terminal emulator, Xterm -ti vt340 )
 8 string num
 4 string sx1
 4 string sx2
@@ -19,8 +20,8 @@ variable newval
 : reset 27 emit "c" type ;
 : mouse 27 emit 91 emit "?1000h" type ; ( DECSET CSI ? Pm h )
 : klick 2 pick 3 = if  drop drop drop  ." " Row " . ." " Col ". ." " Button " . cr then ;  
-: noscroll 27 emit 91 emit "?80l" type ; ( disable sixel scrolling, will change to ?80h in xterm 369 )
-: scroll 27 emit 91 emit "?80h" type ;   ( ?80l in xterm <= 369 )
+: noscroll 27 emit 91 emit "?80h" type ; 
+: scroll 27 emit 91 emit "?80l" type ; 
 : color "#0;2;0;0;0#1;2;100;0;0#2;2;0;100;00#3;2;0;0;100#4;2;100;100;100" 
    type currentcolor type ;
 : end 27 emit 92 emit ;

@@ -73,8 +73,10 @@ pico_set_binary_type(atlast copy_to_ram)
 target_compile_definitions(atlast PRIVATE PICO_MALLOC_PANIC=0)
 </pre>
 
-Compile pico_atlast
-<pre>cd ~/pico/atlast/build
+Compile pico_atlast, go to pico/atlast and create a build directory
+<pre>mkdir build
+cd build
+cmake ..
 make
 </pre>
 

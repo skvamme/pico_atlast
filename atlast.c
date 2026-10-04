@@ -51,8 +51,8 @@
 
 #ifndef INDIVIDUALLY
 #define ARRAY			      /* Array subscripting words */
-//#define BREAK			      /* Asynchronous break facility */
-#define Keyhit		      /* Stop and start wordlisting */
+#define BREAK			      /* Asynchronous break facility */
+//#define Keyhit		      /* Stop and start wordlisting */
 #define COMPILERW		      /* Compiler-writing words */
 #define CONIO			      /* Interactive console I/O */
 #define DEFFIELDS		      /* Definition field access for words */
@@ -60,7 +60,7 @@
 #define EVALUATE		      /* The EVALUATE primitive */
 //#define FILEIO			      /* File I/O primitives */
 #define PICO                          /* Raspberry Pi PICO functions */
-#define PICOW					/* Raspberry Pi PICO W functions, PICO must also be defined */
+//#define PICOW					/* Raspberry Pi PICO W functions, PICO must also be defined */
 #define MATH			      /* Math functions */
 #define MEMMESSAGE      /* Enable USB console. Print message for stack/heap errors */
 //#define PROLOGUE		      /* Prologue processing and auto-init */
@@ -131,7 +131,7 @@ unsigned char *readLine() {
 #define GPIO
 #define SPI
 #define ADC
-#define MULTICORE
+//#define MULTICORE
 #define WATCHDOG
 #define QUEUE
 

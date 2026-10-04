@@ -45,7 +45,7 @@ cd pico-project-generator
 
 Type project name atlast and place it in the pico directory. Check all Library Options. Check "console over usb" and uncheck "console over UART". Press OK. 
 
-Clone this pico_atlast git repository in your home directory and copy the files to the atlast directory in ~/pico The reason I do it this way is that I don't want a git repository in the toolchain. Before copying, rename my CMakeLists.txt to something else and use it as a reference.
+Clone this pico_atlast git repository in your home directory and copy the files to the atlast directory in ~/pico The reason I do it this way is that I don't want a git repository in the toolchain.
 <pre>
 git clone https://github.com/skvamme/pico_atlast
 cd pico_atlast
@@ -53,11 +53,19 @@ mv CMakeLists.txt CMakeLists.original
 cp *.* ~/pico/atlast
 </pre>
  
-Go to ~/pico/atlast and open the file CMakeLists.txt and add a line to the list of User requested libraries down at the end of the file. Put it right after hardware_spi. These two are actually needed, comment out the other ones if you like.
-Add a bottom line to run ATLAST in RAM. 
-Add a last line to the file, make the C-function malloc return 0 if out of memory for the forth word memstat to work.
+Go to ~/pico/atlast and open the file CMakeLists.txt.
+Set the correct pico-version, use: pico or pico_w or pico2 or pico2_w
+<pre>
+  set(PICO_BOARD pico CACHE STRING "Board type")
+</pre>
+and add a few lines to the list of User requested libraries down at the end of the file. Put it right after hardware_spi. 
+Add two lines at the very end of the file to run ATLAST in RAM. (Not for pico_w)
+and to make the C-function malloc return 0 if out of memory for the forth word memstat to work.
 <pre>hardware_spi
 hardware_adc
+# Uncomment if your pico is wireless
+#		pico_cyw43_arch_lwip_poll 
+#		pico_lwip_http
 
  
 # Run in RAM

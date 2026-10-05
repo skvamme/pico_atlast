@@ -1,9 +1,10 @@
 ( neopixel.atl )
-( Can drive an SK6812RGBW type of neopixel. )
+( Can drive an SK6812RGBW type of neopixel/neopixel strip. )
 ( The SK6812 klock input is a 5 volt logic vs the pico output of 3.3 volt. It works, but not reliable. )
 ( DC-DC converter recommended. )
-
-( Type SETUP and then RED and the red LED will come on. If you have a neopixel led strip, try GOSTRIP )
+( Connect SK6812 klock to GPIO4 on the pico, it is pin 6. Connect ground - to pico ground. )
+( Type SETUP and then RED the red LED will come on. OFF turns it off. )
+( If you have a neopixel led strip, try 10 GOSTRIP 10 OFFSTRIP )
 
 ( Initialize gpio pin 4 and set direction to output )
 ( Hardcoded use of GPIO 4, change in atlast.c if you want another pin. )
@@ -13,6 +14,8 @@
 ( R, G, B and W can be 0 to 255 )
 ( R G B W -- int )
 : compose swap 3 roll 3 roll 8 shift + 8 shift + 8 shift + ;
+( Press any key to stop or pull the plug )
+
 
 : on 255 255 255 255 compose neopixel ; 
 : off 0 neopixel ; 
@@ -21,18 +24,16 @@
 : blue 0 0 255 0 compose neopixel ;
 : white 0 0 0 255 compose neopixel ;
 
-
 ( Turn on n number of red pixels )
 ( n -- )
 : gostrip 1 do red loop ;
-
 
 ( Turn off n number of pixels )
 ( n -- )
 : offstrip 1 do off loop ;
 
-
-( Running strip with 72 pixels, a round robin style. Type ROUNDROBIN to start. Press any key to stop )
+( Running strip with 72 leds, a round robin style. Type ROUNDROBIN to start. )
+( Press any key to stop or pull the plug )
 
 ( Put 72 integers on the stack. Here I am using a red integer, use the word COMPOSE to create any color )
 : 72pixels 16711680 16711680 16711680 16711680 16711680 16711680 16711680 16711680 16711680 16711680 
@@ -42,6 +43,7 @@
 
 : first 71 0 do dup neopixel 71 roll loop ;
 
-: all begin first kbhit? if exit then 1 sleep_ms again ;
+( : all begin first kbhit? if exit then 1 sleep_ms again ; )
+: all begin first 1 sleep_ms again ; ( kbhit? does not work on all terminals )
 
 : roundrobin setup clear 72pixels all ;

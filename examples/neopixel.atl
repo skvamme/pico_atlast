@@ -14,8 +14,6 @@
 ( R, G, B and W can be 0 to 255 )
 ( R G B W -- int )
 : compose swap 3 roll 3 roll 8 shift + 8 shift + 8 shift + ;
-( Press any key to stop or pull the plug )
-
 
 : on 255 255 255 255 compose neopixel ; 
 : off 0 neopixel ; 

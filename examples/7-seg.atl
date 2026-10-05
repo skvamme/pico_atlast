@@ -55,7 +55,8 @@
 
 : eight zero start mid horizontal end ;
 
-: run noscroll red zero 1 longsleep black zero
+: run reset noscroll 
+red zero 1 longsleep black zero
 blue one 1 longsleep black one
 green two  1 longsleep black two
 red three  1 longsleep black three
@@ -65,4 +66,4 @@ red six  1 longsleep black six
 blue seven  1 longsleep black seven
 green eight  1 longsleep black eight
 red nine  1 longsleep black nine
-blue zero ;
+blue zero 1 longsleep black wipe ;
